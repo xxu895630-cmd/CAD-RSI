@@ -1,9 +1,6 @@
 <div align="center">
 
-<img src="asset/figures/CAD-RSI_logo.png" alt="CAD-RSI logo" width="180">
-
-<h1>CAD-RSI</h1>
-<h3>Recursive Self-Improving CAD Reconstruction<br>from Engineering Drawings</h3>
+<h1><img src="asset/figures/CAD-RSI_logo.png" alt="CAD-RSI logo" width="64"> CAD-RSI: Recursive Self-Improving CAD Reconstruction from Engineering Drawings</h1>
 
 <p><em>From engineering drawings to editable CAD, with modeling policies that improve through experience.</em></p>
 
@@ -33,8 +30,8 @@
   <a href="#quick-start">Quick Start</a>
 </p>
 
-<img src="asset/figures/5.jpg" alt="Engineering drawings and qualitative reconstructions by CAD-RSI, GPT-6.1 Sol, and Hunyuan3D" width="100%">
-<p><sub>Reconstructing mechanical parts from engineering drawings while preserving local geometric details.</sub></p>
+<img src="asset/figures/1.jpg" alt="CAD-RSI overview: engineering drawings, recursive policy improvement, and editable CAD models" width="720">
+<p><sub>CAD-RSI transforms engineering drawings into editable CAD models through recursive improvement of symbolic modeling policies.</sub></p>
 
 </div>
 
@@ -56,11 +53,7 @@ The framework improves its policies **without updating model weights**. Historic
 | **Dual-system coordination** | System One handles rapid decisions; System Two handles drawing understanding, planning, code generation, verification, and policy refinement. |
 
 <details>
-<summary><b>View the task overview and comparison of CAD generation paradigms</b></summary>
-
-<p align="center">
-  <img src="asset/figures/1.jpg" alt="CAD-RSI task overview: engineering drawings, evolving symbolic policies, editable code, and downstream CAD design" width="720">
-</p>
+<summary><b>View the comparison of CAD generation paradigms</b></summary>
 
 <p align="center">
   <img src="asset/figures/2.jpg" alt="Comparison of end-to-end multimodal models, multi-agent systems, and CAD-RSI" width="100%">
@@ -142,6 +135,11 @@ CAD-RSI/
 <a id="results"></a>
 
 ## 📊 Results
+
+<p align="center">
+  <img src="asset/figures/5.jpg" alt="Engineering drawings and qualitative reconstructions by CAD-RSI, GPT-6.1 Sol, and Hunyuan3D" width="100%">
+  <br><sub>Qualitative reconstruction comparisons on MechAtlas.</sub>
+</p>
 
 Selected results reported in our manuscript on the **300-sample MechAtlas evaluation set**. All methods in the table below use **GPT-5.5** as their backbone.
 
