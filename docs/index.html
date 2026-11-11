@@ -1,39 +1,741 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CAD-RSI — Project Website</title>
-  <meta name="description" content="CAD-RSI: Evolving Worlds for Recursive Self-Improvement in CAD Reconstruction from Engineering Drawings. Project website and code release in preparation.">
-  <style>
-    :root { color-scheme: light; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #182338; background: #f7f8fa; }
-    * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100svh; display: grid; place-items: center; padding: 48px 24px; }
-    main { width: min(100%, 900px); }
-    .label { margin: 0 0 28px; color: #536175; font-size: 12px; font-weight: 650; letter-spacing: .15em; text-transform: uppercase; }
-    h1 { margin: 0; font-size: clamp(52px, 10vw, 92px); line-height: 1.05; letter-spacing: -.065em; }
-    .subtitle { max-width: 810px; margin: 24px 0 36px; font-size: clamp(22px, 3.4vw, 33px); font-weight: 450; line-height: 1.45; letter-spacing: -.025em; }
-    .status { max-width: 670px; margin: 0 0 30px; padding: 22px 24px; background: #fff; border: 1px solid #dde3ec; border-radius: 12px; }
-    .status strong { display: block; margin-bottom: 8px; font-size: 16px; }
-    .status p { margin: 0; color: #536175; font-size: 15px; line-height: 1.7; }
-    .button { display: inline-flex; align-items: center; min-height: 48px; padding: 12px 20px; border-radius: 8px; background: #234db3; color: #fff; text-decoration: none; font-size: 15px; font-weight: 600; }
-    .button:hover { background: #183b91; }
-    a:focus-visible { outline: 3px solid #6c8ee7; outline-offset: 5px; }
-    footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid #dde3ec; color: #677489; font-size: 13px; line-height: 1.6; }
-    @media (max-width: 480px) { body { padding: 36px 20px; } .status { padding: 18px; } footer { margin-top: 40px; } }
-  </style>
+  
+  <!-- Primary Meta Tags -->
+  <!-- TODO: Replace with your paper title and author names -->
+  <meta name="title" content="CAD-RSI: Recursive Self-Improving CAD Reconstruction from Engineering Drawings">
+  <!-- TODO: Write a compelling 150-160 character description of your research -->
+  <meta name="description" content="CAD-RSI recursively evolves symbolic modeling policies for editable CAD reconstruction from standardized engineering drawings and introduces MechAtlas.">
+  <!-- TODO: Add 5-10 relevant keywords for your research area -->
+  <meta name="keywords" content="KEYWORD1, KEYWORD2, KEYWORD3, machine learning, computer vision, AI">
+  <meta name="author" content="Xu Xu, Zhangbo Qiao, Jinxiu Liu, Xuanming Liu, Cheng Song, Weiyang Liu">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <!-- TODO: Replace with your institution or lab name -->
+  <meta property="og:site_name" content="Beihang University">
+  <!-- TODO: Same as paper title above -->
+  <meta property="og:title" content="CAD-RSI: Recursive Self-Improving CAD Reconstruction from Engineering Drawings">
+  <!-- TODO: Same as description above -->
+  <meta property="og:description" content="CAD-RSI recursively evolves symbolic modeling policies for editable CAD reconstruction from standardized engineering drawings and introduces MechAtlas.">
+  <!-- TODO: Replace with your actual website URL -->
+  <meta property="og:url" content="https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE">
+  <!-- TODO: Create a 1200x630px preview image and update path -->
+  <meta property="og:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="CAD-RSI research preview">
+  <meta property="article:published_time" content="2024-01-01T00:00:00.000Z">
+  <meta property="article:author" content="Xu Xu">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="KEYWORD1">
+  <meta property="article:tag" content="KEYWORD2">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- TODO: Replace with your lab/institution Twitter handle -->
+  <meta name="twitter:site" content="@YOUR_TWITTER_HANDLE">
+  <!-- TODO: Replace with first author's Twitter handle -->
+  <meta name="twitter:creator" content="@AUTHOR_TWITTER_HANDLE">
+  <!-- TODO: Same as paper title above -->
+  <meta name="twitter:title" content="CAD-RSI: Recursive Self-Improving CAD Reconstruction from Engineering Drawings">
+  <!-- TODO: Same as description above -->
+  <meta name="twitter:description" content="CAD-RSI recursively evolves symbolic modeling policies for editable CAD reconstruction from standardized engineering drawings and introduces MechAtlas.">
+  <!-- TODO: Same as social preview image above -->
+  <meta name="twitter:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
+  <meta name="twitter:image:alt" content="CAD-RSI research preview">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="CAD-RSI: Recursive Self-Improving CAD Reconstruction from Engineering Drawings">
+  <meta name="citation_author" content="Xu Xu">
+  <meta name="citation_author" content="Zhangbo Qiao">
+  <meta name="citation_author" content="Jinxiu Liu">
+  <meta name="citation_author" content="Xuanming Liu">
+  <meta name="citation_author" content="Cheng Song">
+  <meta name="citation_author" content="Weiyang Liu">
+  <!-- Paper metadata will be added when the paper link is available. -->
+  <meta name="citation_pdf_url" content="">
+  
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#05070c">
+  <meta name="msapplication-TileColor" content="#05070c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+
+  <!-- TODO: Replace with your paper title and authors -->
+  <title>CAD-RSI: Recursive Self-Improving CAD Reconstruction from Engineering Drawings</title>
+  
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/png" href="static/images/CAD-RSI_logo.png?v=20261008-1">
+  <link rel="shortcut icon" type="image/png" href="static/images/CAD-RSI_logo.png?v=20261008-1">
+  <link rel="apple-touch-icon" href="static/images/CAD-RSI_logo.png?v=20261008-1">
+  
+  <!-- Critical CSS - Load synchronously -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css?v=20261111-1">
+  <link rel="preload" as="image" href="static/images/cad-rsi-hero-poster.jpg">
+  <script>document.documentElement.classList.add('js');</script>
+  
+  <!-- Non-critical CSS - Load asynchronously -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  <!-- Fallback for browsers that don't support preload -->
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  </noscript>
+  
+  <!-- Fonts - Optimized loading -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+  
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Font Awesome is rendered by the local CSS/webfont bundle. Keeping the
+       JavaScript runtime out avoids its DOM MutationObserver touching the
+       dynamically updated replay controls. -->
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js?v=20261009-2"></script>
+  <script defer src="static/cad-build/manifest.js?v=20261009-1"></script>
+  <script defer src="static/cad-build/meshes.js?v=20261009-1"></script>
+  <script defer src="static/js/cad-build-replay.js?v=20261009-3"></script>
+  
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "CAD-RSI: Recursive Self-Improving CAD Reconstruction from Engineering Drawings",
+    "description": "CAD-RSI recursively evolves symbolic modeling policies for editable CAD reconstruction from standardized engineering drawings and introduces MechAtlas.",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "Xu Xu",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Beihang University"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Zhangbo Qiao",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Beihang University"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Jinxiu Liu",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "The Chinese University of Hong Kong"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Xuanming Liu",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Westlake University"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Cheng Song",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "National University of Singapore"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Weiyang Liu",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "The Chinese University of Hong Kong"
+        }
+      }
+    ],
+    "datePublished": "2024-01-01",
+    "publisher": {
+      "@type": "Organization",
+      "name": "CONFERENCE_OR_JOURNAL_NAME"
+    },
+    "url": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE",
+    "image": "https://YOUR_DOMAIN.com/static/images/social_preview.png",
+    "keywords": ["KEYWORD1", "KEYWORD2", "KEYWORD3", "machine learning", "computer vision"],
+    "abstract": "FULL_ABSTRACT_TEXT_HERE",
+    "citation": "",
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "mainEntity": {
+      "@type": "WebPage",
+      "@id": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE"
+    },
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "RESEARCH_AREA_1"
+      },
+      {
+        "@type": "Thing", 
+        "name": "RESEARCH_AREA_2"
+      }
+    ]
+  }
+  </script>
+  
+  <!-- Website/Organization Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "INSTITUTION_OR_LAB_NAME",
+    "url": "https://YOUR_INSTITUTION_WEBSITE.com",
+    "logo": "https://YOUR_DOMAIN.com/static/images/CAD-RSI_logo.png",
+    "sameAs": [
+      "https://twitter.com/YOUR_TWITTER_HANDLE",
+      "https://github.com/YOUR_GITHUB_USERNAME"
+    ]
+  }
+  </script>
 </head>
 <body>
-  <main>
-    <p class="label">Research project</p>
-    <h1>CAD-RSI</h1>
-    <p class="subtitle">Evolving Worlds for Recursive Self-Improvement in CAD Reconstruction from Engineering Drawings</p>
-    <section class="status" aria-label="Release status">
-      <strong>Project website coming soon.</strong>
-      <p>We are preparing the project website, code, and documentation for release. Paper links and project resources will be added here as they become available.</p>
-    </section>
-    <a class="button" href="https://github.com/xxu895630-cmd/CAD-RSI">View GitHub repository <span aria-hidden="true">&nbsp;↗</span></a>
-    <footer>This page will be updated with the full project website.</footer>
+
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 15l6-6 6 6"></path></svg>
+  </button>
+
+  <!-- Top navigation -->
+  <header class="site-nav" data-site-nav>
+    <div class="site-nav-inner">
+      <a class="site-nav-brand" href="#top" aria-label="CAD-RSI, back to top">
+        <img src="static/images/CAD-RSI_logo.png" alt="" width="30" height="17">
+        <span>CAD-RSI</span>
+      </a>
+      <nav class="site-nav-links" aria-label="Page sections">
+        <a href="#cad-build-replay">Demo</a>
+        <a href="#abstract">Abstract</a>
+        <a href="#mechatlas">MechAtlas</a>
+        <a href="#method-overview">Method</a>
+        <a href="#mechatlas-evaluation">Results</a>
+        <a href="#BibTeX">BibTeX</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+  <section class="hero cad-rsi-hero" id="top">
+    <div class="cad-rsi-hero-visual" aria-hidden="true">
+      <!-- Text-free cut of CAD-RSI_Evolving_Worlds.mp4, made for use behind the title. -->
+      <video class="cad-rsi-hero-video" autoplay muted loop playsinline preload="auto" tabindex="-1"
+        poster="static/images/cad-rsi-hero-poster.jpg" data-hero-video>
+        <source src="static/videos/cad-rsi-hero-loop.webm" type="video/webm">
+        <source src="static/videos/cad-rsi-hero-loop.mp4" type="video/mp4">
+      </video>
+      <div class="cad-rsi-hero-scrim"></div>
+      <div class="cad-rsi-hero-grain"></div>
+    </div>
+
+    <div class="hero-body">
+      <div class="cad-rsi-hero-content">
+        <p class="cad-rsi-eyebrow">Recursive self-improvement for CAD reconstruction</p>
+
+        <!-- TODO: Replace with your paper title -->
+        <h1 class="title is-1 publication-title cad-rsi-title">
+          <span class="cad-rsi-brand-line">
+            <img class="cad-rsi-logo" src="static/images/CAD-RSI_logo.png" alt="" aria-hidden="true">
+            <span class="cad-rsi-project-name">CAD-RSI<span class="cad-rsi-colon">:</span></span>
+          </span>
+          <span class="cad-rsi-title-line cad-rsi-title-line-primary">Recursive Self-Improving CAD Reconstruction</span>
+          <span class="cad-rsi-title-line">from Engineering Drawings</span>
+        </h1>
+
+        <div class="publication-authors cad-rsi-authors">
+          <div class="author-row">
+            <span class="author-block">Xu Xu<sup>1</sup>,</span>
+            <span class="author-block">Zhangbo Qiao<sup>1</sup>,</span>
+            <span class="author-block">Jinxiu Liu<sup>2</sup>,</span>
+            <span class="author-block">Xuanming Liu<sup>3</sup>,</span>
+            <span class="author-block">Cheng Song<sup>4</sup>,</span>
+            <span class="author-block">Weiyang Liu<sup>2,*</sup></span>
+          </div>
+        </div>
+        <div class="cad-rsi-affiliation">
+          <span class="affiliation-block"><sup>1</sup> Beihang University</span>
+          <span class="affiliation-block"><sup>2</sup> The Chinese University of Hong Kong</span>
+          <span class="affiliation-block"><sup>3</sup> Westlake University</span>
+          <span class="affiliation-block"><sup>4</sup> National University of Singapore</span>
+        </div>
+        <p class="cad-rsi-correspondence"><sup>*</sup> Corresponding author</p>
+
+        <div class="publication-links cad-rsi-actions">
+          <!-- Paper link intentionally left empty until publication. -->
+          <span class="link-block">
+            <a class="hero-btn hero-btn--placeholder" role="link" aria-disabled="true" title="Paper link coming soon">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5M9 13h6M9 17h4"></path></svg>
+              <span>arXiv</span>
+            </a>
+          </span>
+
+          <!-- Code repository -->
+          <span class="link-block">
+            <a href="https://github.com/xxu895630-cmd/CAD-RSI" target="_blank" rel="noopener noreferrer" class="hero-btn">
+              <svg class="is-filled" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.82-.26.82-.57v-2.04c-3.34.73-4.04-1.6-4.04-1.6-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.31.76-1.6-2.67-.31-5.47-1.34-5.47-5.94 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .3"></path></svg>
+              <span>Code</span>
+            </a>
+          </span>
+
+          <!-- MechAtlas benchmark -->
+          <span class="link-block">
+            <a href="https://huggingface.co/datasets/XUXU666/MechAtlas" target="_blank" rel="noopener noreferrer" class="hero-btn">
+              <span class="hero-btn-emoji" aria-hidden="true">🤗</span>
+              <span>Benchmark</span>
+            </a>
+          </span>
+
+          <span class="link-block">
+            <a href="static/videos/CAD-RSI_Evolving_Worlds.mp4" class="hero-btn hero-btn--film" data-film-open>
+              <svg class="is-filled" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l11-6.5z"></path></svg>
+              <span>Watch the film</span>
+            </a>
+          </span>
+        </div>
+
+        <dl class="cad-rsi-hero-stats" aria-label="Key results">
+          <div><dt>MechAtlas drawings</dt><dd>49,662</dd></div>
+          <div><dt>Invalidity ratio</dt><dd>0.00%</dd></div>
+          <div><dt>VAGF</dt><dd>0.8321</dd></div>
+          <div><dt>Inference time</dt><dd>&minus;58.5%</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <button type="button" class="hero-video-toggle" data-hero-video-toggle aria-label="Pause background video" aria-pressed="false">
+      <span class="hero-video-toggle-glyph" aria-hidden="true"></span>
+    </button>
+    <a class="hero-scroll-cue" href="#cad-build-replay" aria-label="Scroll to the reconstruction demo"><span></span></a>
+  </section>
+
+
+<section class="cad-replay cad-replay-light section-surface-white" id="cad-build-replay">
+  <div class="cad-replay-ambient" aria-hidden="true"></div>
+  <div class="cad-replay-shell">
+    <div class="cad-replay-heading">
+      <p class="section-eyebrow">01 &middot; Reconstruction replay</p>
+      <h2 class="title is-3 cad-replay-title">From Drawing to Editable CAD</h2>
+      <p class="cad-replay-intro">Each engineering drawing is rebuilt as an editable CadQuery program. The 3D model and the active line of code advance together, step by step &mdash; drag the model to rotate it.</p>
+    </div>
+    <div class="cad-replay-stage" data-cad-replay aria-busy="true">
+      <article class="cad-replay-panel cad-replay-drawing-panel" aria-label="Engineering drawing">
+        <div class="cad-drawing-canvas">
+          <div class="cad-drawing-grid" aria-hidden="true"></div>
+          <img class="cad-drawing-image" data-cad-drawing alt="" draggable="false">
+          <div class="cad-drawing-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <div class="cad-drawing-placeholder" data-cad-drawing-placeholder>
+            <span class="cad-loader"></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="cad-replay-panel cad-replay-build-panel" aria-label="Automatic build sequence">
+        <div class="cad-model-viewport">
+          <div class="cad-orbit cad-orbit-a" aria-hidden="true"></div>
+          <div class="cad-orbit cad-orbit-b" aria-hidden="true"></div>
+          <div class="cad-model-stack" data-cad-model-stack>
+            <img class="cad-model-frame is-visible" data-cad-model-frame-a alt="" draggable="false">
+            <img class="cad-model-frame" data-cad-model-frame-b alt="" draggable="false">
+          </div>
+          <video class="cad-remotion-video" data-cad-remotion-video autoplay muted playsinline preload="metadata"></video>
+          <canvas class="cad-interactive-canvas" data-cad-interactive-canvas tabindex="0" role="application" aria-label="Interactive CAD model. Drag to rotate; use arrow keys for precise rotation."></canvas>
+          <div class="cad-scanline" aria-hidden="true"></div>
+          <div class="cad-model-loading" data-cad-model-loading>
+            <span class="cad-loader"></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="cad-replay-panel cad-replay-code-panel" aria-label="CadQuery source code">
+        <div class="cad-code-viewport" data-cad-code-viewport tabindex="0" aria-label="CadQuery source code with the current operation highlighted">
+          <pre class="cad-code-lines" data-cad-code-lines><code></code></pre>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Paper abstract -->
+<section class="section abstract-section section-surface-tint" id="abstract" aria-labelledby="abstract-title">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <p class="section-eyebrow">02 &middot; Abstract</p>
+        <h2 id="abstract-title" class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Multimodal models and multi-agent systems have advanced CAD reconstruction from point clouds, images, and text descriptions.
+            Yet reconstructing editable CAD models from standardized engineering drawings remains challenging.
+            (1) Task-specific experience has limited generalizability.
+            (2) Policy evaluation incurs redundant execution of historical tasks.
+            (3) Using one model for all subtasks introduces redundant reasoning.
+            We introduce <strong>CAD-RSI</strong>, a framework that recursively evolves generalizable symbolic modeling policies for editable CAD reconstruction from standardized engineering drawings.
+            <strong><em>The Real</em></strong> collects execution trajectories, while historical backtracking in <strong><em>The Imaginary</em></strong> evaluates policies using recorded outcomes without repeating CAD execution.
+            <strong><em>The Symbolic</em></strong> refines these policies to guide subsequent exploration.
+            Dual-system coordination combines rapid decisions with deliberate reasoning to reduce redundant computation.
+            Public CAD benchmarks provide limited coverage of professionally reviewed engineering drawings used in industrial production.
+            We therefore release <strong>MechAtlas</strong>, comprising 49,662 such drawings manually drafted by professional CAD engineers and paired with corresponding STEP models.
+            Experimental results show that CAD-RSI surpasses existing CAD reconstruction methods and achieves a VAGF of 0.8321, nearly matching frontier-level performance, while reducing average per-task token consumption and inference time by 38.9% and 58.5%.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<!-- MechAtlas dataset -->
+<section class="section mechatlas-section section-surface-white" id="mechatlas" aria-labelledby="mechatlas-title">
+  <div class="mechatlas-inner">
+    <p class="section-eyebrow">03 &middot; Benchmark</p>
+    <h2 id="mechatlas-title" class="title is-3">MechAtlas</h2>
+    <picture class="mechatlas-atlas">
+      <source
+        type="image/webp"
+        srcset="static/mechatlas/contact-sheet-1920.webp 1920w, static/mechatlas/contact-sheet.webp 3840w"
+        sizes="(max-width: 1312px) calc(100vw - 2rem), 1280px">
+      <img
+        src="static/mechatlas/contact-sheet.png"
+        width="3840"
+        height="2160"
+        alt="A curated atlas of one hundred and eight professionally designed mechanical CAD parts from MechAtlas"
+        loading="lazy"
+        decoding="async">
+    </picture>
+
+    <figure class="mechatlas-overview" aria-labelledby="mechatlas-overview-caption">
+      <picture>
+        <source
+          type="image/webp"
+          srcset="static/mechatlas/figure-4-1600.webp 1600w, static/mechatlas/figure-4.webp 2833w"
+          sizes="(max-width: 1312px) calc(100vw - 2rem), 1280px">
+        <img
+          src="static/mechatlas/figure-4.jpg"
+          width="2833"
+          height="1380"
+          alt="MechAtlas geometric diversity overview with a keyword cloud, face-count distribution, and geometric shape categories"
+          loading="lazy"
+          decoding="async">
+      </picture>
+      <figcaption id="mechatlas-overview-caption" class="paper-figure-caption">
+        <strong>MechAtlas</strong> is a benchmark of 49,662 samples for CAD reconstruction from standard engineering drawings. Its drawings were manually drafted by professional CAD engineers, rigorously reviewed, signed and stamped for approval, and subsequently used in industrial production. Each sample pairs a drawing containing multiple views, dimensions, tolerances, and technical annotations with a corresponding 3D CAD model in STEP format. Personal information is removed for public release while the original technical content and layout are preserved. The visualization summarizes its geometric diversity through a keyword cloud, the distribution of face counts, and ten geometric shape categories. These STEP models provide references for reconstruction evaluation and support multi-view rendering and point-cloud sampling for multimodal CAD research.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+<!-- End MechAtlas dataset -->
+
+
+<!-- CAD-RSI overview -->
+<section class="section method-overview-section section-surface-tint" id="method-overview" aria-labelledby="method-overview-title">
+  <div class="method-overview-inner">
+    <p class="section-eyebrow">04 &middot; Overview</p>
+    <h2 id="method-overview-title" class="title is-3">CAD-RSI Overview</h2>
+    <figure class="method-overview-figure" aria-labelledby="method-overview-caption">
+      <picture>
+        <source
+          type="image/webp"
+          srcset="static/images/cad-rsi-overview-1920.webp 1920w, static/images/cad-rsi-overview-3840.webp 3840w"
+          sizes="(max-width: 1312px) calc(100vw - 2rem), 1280px">
+        <img
+          src="static/images/cad-rsi-overview.jpg"
+          width="6819"
+          height="5688"
+          alt="Overview of CAD-RSI reconstructing an editable CAD model from an engineering drawing through The Real, The Imaginary, and The Symbolic"
+          loading="lazy"
+          decoding="async">
+      </picture>
+      <figcaption id="method-overview-caption" class="paper-figure-caption">
+        <strong>CAD-RSI</strong> generates editable CadQuery code from engineering drawings through recursive self-improvement of symbolic modeling policies. The resulting CAD models support user editing and downstream design.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+<!-- End CAD-RSI overview -->
+
+
+<!-- CAD generation paradigms -->
+<section class="section paradigm-comparison-section section-surface-white" id="cad-generation-paradigms" aria-labelledby="cad-generation-paradigms-title">
+  <div class="paradigm-comparison-inner">
+    <p class="section-eyebrow">05 &middot; Positioning</p>
+    <h2 id="cad-generation-paradigms-title" class="title is-3">CAD Generation Paradigms</h2>
+    <figure class="paradigm-comparison-figure" aria-labelledby="cad-generation-paradigms-caption">
+      <picture>
+        <source
+          type="image/webp"
+          srcset="static/images/cad-generation-paradigms-1920.webp 1920w, static/images/cad-generation-paradigms-3840.webp 3840w"
+          sizes="(max-width: 1312px) calc(100vw - 2rem), 1280px">
+        <img
+          src="static/images/cad-generation-paradigms.jpg"
+          width="6122"
+          height="2128"
+          alt="Comparison of end-to-end unified multimodal large language models, multi-agent systems, and CAD-RSI for CAD generation"
+          loading="lazy"
+          decoding="async">
+      </picture>
+      <figcaption id="cad-generation-paradigms-caption" class="paper-figure-caption">
+        <strong>End-to-End Unified MLLMs</strong> provide a unified framework for generating parametric CAD models from diverse inputs, but require large paired datasets and substantial computational resources and do not accumulate reusable modeling experience during inference. <strong>Multi-Agent Systems</strong> improve reliability through coordinated planning, code generation, and validation, yet often rely on a single model for complex reasoning across predefined workflows and retain task-specific rather than generalizable experience. In contrast, <strong>CAD-RSI</strong> establishes a scalable, recursively self-improving process that learns generalizable symbolic modeling policies and coordinates complementary systems to improve performance and efficiency during long-horizon execution.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+<!-- End CAD generation paradigms -->
+
+
+<!-- CAD-RSI architecture -->
+<section class="section architecture-section section-surface-tint" id="cad-rsi-architecture" aria-labelledby="cad-rsi-architecture-title">
+  <div class="architecture-inner">
+    <p class="section-eyebrow">06 &middot; Method</p>
+    <h2 id="cad-rsi-architecture-title" class="title is-3">CAD-RSI Architecture</h2>
+    <figure class="architecture-figure" aria-labelledby="cad-rsi-architecture-caption">
+      <picture>
+        <source
+          type="image/webp"
+          srcset="static/images/cad-rsi-architecture-1920.webp 1920w, static/images/cad-rsi-architecture-3840.webp 3840w"
+          sizes="(max-width: 1312px) calc(100vw - 2rem), 1280px">
+        <img
+          src="static/images/cad-rsi-architecture.jpg"
+          width="6660"
+          height="4271"
+          alt="Overall architecture of CAD-RSI connecting The Real, The Imaginary, and The Symbolic in a recursive policy-evolution loop"
+          loading="lazy"
+          decoding="async">
+      </picture>
+      <figcaption id="cad-rsi-architecture-caption" class="paper-figure-caption">
+        <strong><em>The Real</em></strong>, <strong><em>The Imaginary</em></strong>, and <strong><em>The Symbolic</em></strong> form a recursive loop that evolves generalizable modeling policies through CAD exploration and history backtracking. <strong><em>The Real</em></strong> grounds exploration in the CAD environment, <strong><em>The Imaginary</em></strong> evaluates and ranks candidate policies from recorded outcomes without repeating CAD execution, and <strong><em>The Symbolic</em></strong> revises policy code to guide later rounds. Dual-system coordination assigns rapid decisions to <strong><em>System One</em></strong> and drawing interpretation, planning, code generation, and policy refinement to <strong><em>System Two</em></strong>, reducing redundant reasoning.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+<!-- End CAD-RSI architecture -->
+
+
+<!-- MechAtlas evaluation -->
+<section class="section evaluation-section section-surface-white" id="mechatlas-evaluation" aria-labelledby="mechatlas-evaluation-title">
+  <div class="evaluation-inner">
+    <p class="section-eyebrow">07 &middot; Results</p>
+    <h2 id="mechatlas-evaluation-title" class="title is-3">MechAtlas Evaluation</h2>
+
+    <div class="comparison-table-shell" role="region" aria-label="MechAtlas quantitative comparison" tabindex="0">
+      <table class="comparison-table">
+        <caption>Table. Comparison on 300 MechAtlas samples. <sup>&lowast;</sup> and <sup>&dagger;</sup> denote Claude Opus 4.8 and GPT-5.5 backbones, respectively.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Method</th>
+            <th scope="col">IR (%) &darr;</th>
+            <th scope="col">IoU (%) &uarr;</th>
+            <th scope="col">SIoU (%) &uarr;</th>
+            <th scope="col">Med. CD &darr;</th>
+            <th scope="col">Mean CD &darr;</th>
+            <th scope="col">VAGF &uarr;</th>
+          </tr>
+        </thead>
+        <tbody class="comparison-group-body">
+          <tr class="comparison-group"><th colspan="7" scope="rowgroup">Commercial LLMs</th></tr>
+          <tr class="data-row">
+            <th scope="row">GPT-5.5</th><td>42.00</td><td>75.48</td><td>76.67</td><td>0.1199</td><td>1.517</td><td>0.3250</td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">GPT-5.6 Sol</th><td>12.67 <small class="delta-down">&darr;29.33</small></td><td>77.27 <small class="delta-up">&uarr;1.79</small></td><td>80.18 <small class="delta-up">&uarr;3.51</small></td><td>0.0378 <small class="delta-down">&darr;0.0821</small></td><td>1.508 <small class="delta-down">&darr;0.009</small></td><td>0.5467 <small class="delta-up">&uarr;0.2217</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">GPT-6 Astra</th><td><u>0.33</u> <small class="delta-down">&darr;41.67</small></td><td><u>93.24</u> <small class="delta-up">&uarr;17.76</small></td><td><u>94.99</u> <small class="delta-up">&uarr;18.32</small></td><td><u>0.0118</u> <small class="delta-down">&darr;0.1081</small></td><td><u>0.512</u> <small class="delta-down">&darr;1.005</small></td><td><u>0.8553</u> <small class="delta-up">&uarr;0.5303</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">GPT-6.1 Sol</th><td>1.00 <small class="delta-down">&darr;41.00</small></td><td>91.55 <small class="delta-up">&uarr;16.07</small></td><td>93.92 <small class="delta-up">&uarr;17.25</small></td><td>0.0135 <small class="delta-down">&darr;0.1064</small></td><td>0.526 <small class="delta-down">&darr;0.991</small></td><td>0.8233 <small class="delta-up">&uarr;0.4983</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Claude Opus 4.8</th><td>44.67 <small class="delta-up">&uarr;2.67</small></td><td>67.94 <small class="delta-down">&darr;7.54</small></td><td>70.51 <small class="delta-down">&darr;6.16</small></td><td>0.4904 <small class="delta-up">&uarr;0.3705</small></td><td>6.441 <small class="delta-up">&uarr;4.924</small></td><td>0.1755 <small class="delta-down">&darr;0.1495</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Claude Fable 5.1</th><td>0.67 <small class="delta-down">&darr;41.33</small></td><td><strong>93.44</strong> <small class="delta-up">&uarr;17.96</small></td><td><strong>95.18</strong> <small class="delta-up">&uarr;18.51</small></td><td><strong>0.0085</strong> <small class="delta-down">&darr;0.1114</small></td><td>0.873 <small class="delta-down">&darr;0.644</small></td><td><strong>0.8710</strong> <small class="delta-up">&uarr;0.5460</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Claude Sonnet 5.5</th><td>8.67 <small class="delta-down">&darr;33.33</small></td><td>80.93 <small class="delta-up">&uarr;5.45</small></td><td>84.28 <small class="delta-up">&uarr;7.61</small></td><td>0.0841 <small class="delta-down">&darr;0.0358</small></td><td>2.699 <small class="delta-up">&uarr;1.182</small></td><td>0.5133 <small class="delta-up">&uarr;0.1883</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Claude Opus 5.5</th><td>1.67 <small class="delta-down">&darr;40.33</small></td><td>92.49 <small class="delta-up">&uarr;17.01</small></td><td>94.64 <small class="delta-up">&uarr;17.97</small></td><td>0.0140 <small class="delta-down">&darr;0.1059</small></td><td>0.521 <small class="delta-down">&darr;0.996</small></td><td>0.8190 <small class="delta-up">&uarr;0.4940</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Gemini 3.1 Pro Preview</th><td>37.33 <small class="delta-down">&darr;4.67</small></td><td>69.79 <small class="delta-down">&darr;5.69</small></td><td>73.77 <small class="delta-down">&darr;2.90</small></td><td>0.3781 <small class="delta-up">&uarr;0.2582</small></td><td>6.211 <small class="delta-up">&uarr;4.694</small></td><td>0.2161 <small class="delta-down">&darr;0.1089</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Gemini 3.8 Flash</th><td>3.67 <small class="delta-down">&darr;38.33</small></td><td>84.48 <small class="delta-up">&uarr;9.00</small></td><td>86.86 <small class="delta-up">&uarr;10.19</small></td><td>0.0493 <small class="delta-down">&darr;0.0706</small></td><td>2.146 <small class="delta-up">&uarr;0.629</small></td><td>0.6249 <small class="delta-up">&uarr;0.2999</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Grok 4.7</th><td>9.33 <small class="delta-down">&darr;32.67</small></td><td>72.26 <small class="delta-down">&darr;3.22</small></td><td>75.38 <small class="delta-down">&darr;1.29</small></td><td>0.2200 <small class="delta-up">&uarr;0.1001</small></td><td>4.849 <small class="delta-up">&uarr;3.332</small></td><td>0.3799 <small class="delta-up">&uarr;0.0549</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Doubao Seed 2.1 Pro</th><td>27.67 <small class="delta-down">&darr;14.33</small></td><td>48.22 <small class="delta-down">&darr;27.26</small></td><td>54.41 <small class="delta-down">&darr;22.26</small></td><td>1.4027 <small class="delta-up">&uarr;1.2828</small></td><td>9.203 <small class="delta-up">&uarr;7.686</small></td><td>0.1572 <small class="delta-down">&darr;0.1678</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Qwen3.7-Plus</th><td>35.67 <small class="delta-down">&darr;6.33</small></td><td>42.38 <small class="delta-down">&darr;33.10</small></td><td>47.16 <small class="delta-down">&darr;29.51</small></td><td>1.9052 <small class="delta-up">&uarr;1.7853</small></td><td>10.115 <small class="delta-up">&uarr;8.598</small></td><td>0.1153 <small class="delta-down">&darr;0.2097</small></td>
+          </tr>
+        </tbody>
+        <tbody class="comparison-group-body">
+          <tr class="comparison-group"><th colspan="7" scope="rowgroup">Open-Source LLMs</th></tr>
+          <tr class="data-row">
+            <th scope="row">Qwen3-VL-32B-Instruct</th><td>55.67</td><td>31.59</td><td>35.83</td><td>4.6771</td><td>13.913</td><td>0.0492</td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Qwen3.8-27B</th><td>26.33 <small class="delta-down">&darr;29.34</small></td><td>47.86 <small class="delta-up">&uarr;16.27</small></td><td>50.78 <small class="delta-up">&uarr;14.95</small></td><td>1.1195 <small class="delta-down">&darr;3.5576</small></td><td>10.057 <small class="delta-down">&darr;3.856</small></td><td>0.1657 <small class="delta-up">&uarr;0.1165</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">GLM-4.6V</th><td>52.33 <small class="delta-down">&darr;3.34</small></td><td>40.65 <small class="delta-up">&uarr;9.06</small></td><td>44.42 <small class="delta-up">&uarr;8.59</small></td><td>1.9125 <small class="delta-down">&darr;2.7646</small></td><td>14.980 <small class="delta-up">&uarr;1.067</small></td><td>0.0896 <small class="delta-up">&uarr;0.0404</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Kimi-K3</th><td>12.33 <small class="delta-down">&darr;43.34</small></td><td>58.05 <small class="delta-up">&uarr;26.46</small></td><td>61.19 <small class="delta-up">&uarr;25.36</small></td><td>0.4465 <small class="delta-down">&darr;4.2306</small></td><td>8.039 <small class="delta-down">&darr;5.874</small></td><td>0.2915 <small class="delta-up">&uarr;0.2423</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">DeepSeek-V4.1-Flash</th><td>15.33 <small class="delta-down">&darr;40.34</small></td><td>54.78 <small class="delta-up">&uarr;23.19</small></td><td>57.95 <small class="delta-up">&uarr;22.12</small></td><td>0.7474 <small class="delta-down">&darr;3.9297</small></td><td>8.074 <small class="delta-down">&darr;5.839</small></td><td>0.2325 <small class="delta-up">&uarr;0.1833</small></td>
+          </tr>
+        </tbody>
+        <tbody class="comparison-group-body">
+          <tr class="comparison-group"><th colspan="7" scope="rowgroup">CAD Reconstruction Models</th></tr>
+          <tr class="data-row">
+            <th scope="row">Cad-Coder</th><td>74.67</td><td>15.34</td><td>12.27</td><td>4.9280</td><td>29.120</td><td>0.0277</td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Drawing2CAD</th><td>70.33 <small class="delta-down">&darr;4.34</small></td><td>18.68 <small class="delta-up">&uarr;3.34</small></td><td>15.21 <small class="delta-up">&uarr;2.94</small></td><td>3.7173 <small class="delta-down">&darr;1.2107</small></td><td>25.452 <small class="delta-down">&darr;3.668</small></td><td>0.0365 <small class="delta-up">&uarr;0.0088</small></td>
+          </tr>
+        </tbody>
+        <tbody class="comparison-group-body">
+          <tr class="comparison-group"><th colspan="7" scope="rowgroup">Agentic Frameworks</th></tr>
+          <tr class="data-row">
+            <th scope="row">IterCAD<sup>&lowast;</sup></th><td>5.67</td><td>70.22</td><td>74.39</td><td>0.2519</td><td>6.478</td><td>0.3943</td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">IterCAD<sup>&dagger;</sup></th><td>3.00 <small class="delta-down">&darr;2.67</small></td><td>77.09 <small class="delta-up">&uarr;6.87</small></td><td>79.91 <small class="delta-up">&uarr;5.52</small></td><td>0.1502 <small class="delta-down">&darr;0.1017</small></td><td>3.897 <small class="delta-down">&darr;2.581</small></td><td>0.4675 <small class="delta-up">&uarr;0.0732</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Ortho2CAD-ITS<sup>&lowast;</sup></th><td>3.00 <small class="delta-down">&darr;2.67</small></td><td>72.38 <small class="delta-up">&uarr;2.16</small></td><td>76.26 <small class="delta-up">&uarr;1.87</small></td><td>0.3107 <small class="delta-up">&uarr;0.0588</small></td><td>4.987 <small class="delta-down">&darr;1.491</small></td><td>0.3608 <small class="delta-down">&darr;0.0335</small></td>
+          </tr>
+          <tr class="data-row">
+            <th scope="row">Ortho2CAD-ITS<sup>&dagger;</sup></th><td>1.33 <small class="delta-down">&darr;4.34</small></td><td>79.14 <small class="delta-up">&uarr;8.92</small></td><td>83.15 <small class="delta-up">&uarr;8.76</small></td><td>0.1503 <small class="delta-down">&darr;0.1016</small></td><td>2.649 <small class="delta-down">&darr;3.829</small></td><td>0.4707 <small class="delta-up">&uarr;0.0764</small></td>
+          </tr>
+          <tr class="data-row cad-rsi-result">
+            <th scope="row">CAD-RSI<sup>&lowast;</sup></th><td><strong>0.00</strong> <small class="delta-down">&darr;5.67</small></td><td>88.94 <small class="delta-up">&uarr;18.72</small></td><td>91.27 <small class="delta-up">&uarr;16.88</small></td><td>0.0185 <small class="delta-down">&darr;0.2334</small></td><td>0.587 <small class="delta-down">&darr;5.891</small></td><td>0.8199 <small class="delta-up">&uarr;0.4256</small></td>
+          </tr>
+          <tr class="data-row cad-rsi-result">
+            <th scope="row">CAD-RSI<sup>&dagger;</sup></th><td><strong>0.00</strong> <small class="delta-down">&darr;5.67</small></td><td>91.49 <small class="delta-up">&uarr;21.27</small></td><td>94.09 <small class="delta-up">&uarr;19.70</small></td><td>0.0131 <small class="delta-down">&darr;0.2388</small></td><td><strong>0.456</strong> <small class="delta-down">&darr;6.022</small></td><td>0.8321 <small class="delta-up">&uarr;0.4378</small></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure class="evaluation-figure" aria-labelledby="mechatlas-evaluation-caption">
+      <picture>
+        <source
+          type="image/webp"
+          srcset="static/images/mechatlas-qualitative-comparison-1920.webp 1920w, static/images/mechatlas-qualitative-comparison-3840.webp 3840w"
+          sizes="(max-width: 1312px) calc(100vw - 2rem), 1280px">
+        <img
+          src="static/images/mechatlas-qualitative-comparison.jpg"
+          width="6122"
+          height="1895"
+          alt="Qualitative comparisons on MechAtlas between CAD-RSI, GPT-6.1 Sol, and Hunyuan3D across ten engineering drawings"
+          loading="lazy"
+          decoding="async">
+      </picture>
+      <figcaption id="mechatlas-evaluation-caption" class="paper-figure-caption">
+        Across 300 MechAtlas samples, <strong>CAD-RSI</strong> consistently improves reconstruction quality with both backbones. With GPT-5.5, it reduces IR from 42.00% to 0.00%, increases IoU from 75.48% to 91.49%, and raises VAGF from 0.3250 to 0.8321, with similar gains under Claude Opus 4.8. The qualitative rows compare input engineering drawings with reconstructions from CAD-RSI, GPT-6.1 Sol, and Hunyuan3D, confirming CAD-RSI's stronger preservation of local geometric details.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+<!-- End MechAtlas evaluation -->
+
+
+
+
+<!--BibTex citation -->
+  <section class="section bibtex-section" id="BibTeX" aria-labelledby="bibtex-title">
+    <div class="container is-max-desktop content">
+      <p class="section-eyebrow">08 &middot; Citation</p>
+      <div class="bibtex-header">
+        <h2 class="title" id="bibtex-title">BibTeX</h2>
+        <button type="button" class="copy-bibtex-btn" onclick="copyBibTeX()" disabled title="BibTeX coming soon" aria-label="Copy BibTeX to clipboard (not yet available)">
+          <svg class="copy-bibtex-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <rect x="8" y="8" width="13" height="13" rx="2"></rect>
+            <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <span class="copy-text" aria-live="polite">Copy</span>
+        </button>
+      </div>
+      <!-- BibTeX intentionally left empty until publication. -->
+      <pre id="bibtex-code" aria-label="BibTeX citation placeholder"><code></code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
   </main>
-</body>
-</html>
+
+  <!-- Film lightbox: the full CAD-RSI film with its on-screen captions -->
+  <dialog class="film-modal" id="film-modal" aria-label="CAD-RSI: Evolving Worlds (film)">
+    <div class="film-modal-frame">
+      <button type="button" class="film-modal-close" data-film-close aria-label="Close film">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+      <video class="film-modal-video" controls playsinline preload="none" poster="static/images/cad-rsi-hero-poster.jpg">
+        <source src="static/videos/CAD-RSI_Evolving_Worlds.mp4" type="video/mp4">
+      </video>
+    </div>
+  </dialog>
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="footer-brand">
+          <img src="static/images/CAD-RSI_logo.png" alt="" width="34" height="19">
+          <span>CAD-RSI</span>
+        </div>
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>

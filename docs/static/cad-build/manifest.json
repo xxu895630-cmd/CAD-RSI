@@ -1,0 +1,1335 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-08T06:59:11.330345+00:00",
+  "assetBase": "static/cad-build",
+  "loop": true,
+  "defaultStepDurationMs": 1185,
+  "parts": [
+    {
+      "id": "00000007",
+      "title": "Chamfered Keyhole Block",
+      "drawing": "00000007/drawing.png",
+      "drawingSize": [
+        1484,
+        2100
+      ],
+      "animation": "00000007/animation.webp",
+      "animationInfo": {
+        "path": "animation.webp",
+        "frameCount": 21,
+        "size": [
+          960,
+          720
+        ]
+      },
+      "frames": [
+        "00000007/frames/step-01.png",
+        "00000007/frames/step-02.png",
+        "00000007/frames/step-03.png",
+        "00000007/frames/step-04.png",
+        "00000007/frames/step-05.png",
+        "00000007/frames/step-06.png"
+      ],
+      "sourcePath": "零件素材/step/00000007.py",
+      "sourceCode": "\"\"\"Parametric CadQuery reconstruction of 00000007.step.\n\nThe part is a chamfered rectangular block with a keyhole-like through cut\nand two families of stepped cross-bores.  Dimensions are in millimetres.\n\"\"\"\n\nfrom pathlib import Path\n\nimport cadquery as cq\n\n\ndef _cylinder(\n    radius: float,\n    length: float,\n    origin: tuple[float, float, float],\n    direction: tuple[float, float, float],\n) -> cq.Workplane:\n    \"\"\"Return a cylindrical cutting tool with an explicit global axis.\"\"\"\n\n    return cq.Workplane(cq.Plane(origin=origin, normal=direction)).circle(radius).extrude(length)\n\n\ndef build_part() -> cq.Workplane:\n    \"\"\"Build the editable CAD model in the source STEP coordinate system.\"\"\"\n\n    # 70 x 25 x 50 body: X=[-35, 35], Y=[-25, 0], Z=[-25, 25].\n    part = (\n        cq.Workplane(\"XY\")\n        .box(70.0, 25.0, 50.0, centered=(True, True, True))\n        .translate((0.0, -12.5, 0.0))\n        .edges()\n        .chamfer(0.5)\n    )\n\n    # Through-Z circular opening and its 2 mm-wide radial slot to the -X side.\n    circular_opening = _cylinder(10.0, 52.0, (-13.0, -12.5, -26.0), (0.0, 0.0, 1.0))\n    radial_slot = (\n        cq.Workplane(\"XY\", origin=(-24.5, -12.5, -26.0))\n        .rect(23.0, 2.0)\n        .extrude(52.0)\n    )\n    part = part.cut(circular_opening.union(radial_slot))\n\n    # Two rear-counterbored holes on the +X side.\n    for z_pos in (-14.25, 14.25):\n        pilot = _cylinder(3.2, 18.2, (15.0, 0.0, z_pos), (0.0, -1.0, 0.0))\n        counterbore = _cylinder(5.5, 6.8, (15.0, -18.2, z_pos), (0.0, -1.0, 0.0))\n        part = part.cut(pilot.union(counterbore))\n\n    # Two split stepped holes on the -X side.  The central 2 mm of each\n    # bore is already removed by the radial slot above.\n    for z_pos in (-15.0, 15.0):\n        front_pilot = _cylinder(2.1, 11.5, (-27.5, 0.0, z_pos), (0.0, -1.0, 0.0))\n        rear_pilot = _cylinder(2.65, 5.8, (-27.5, -13.5, z_pos), (0.0, -1.0, 0.0))\n        rear_counterbore = _cylinder(5.0, 5.7, (-27.5, -19.3, z_pos), (0.0, -1.0, 0.0))\n        part = part.cut(front_pilot.union(rear_pilot).union(rear_counterbore))\n\n    return part\n\n\nresult = build_part()\n\n\nif __name__ == \"__main__\":\n    output_path = Path(__file__).with_name(f\"{Path(__file__).stem}_reconstructed.step\")\n    cq.exporters.export(result, str(output_path))\n    print(f\"Wrote {output_path}\")\n",
+      "language": "python",
+      "steps": [
+        {
+          "index": 0,
+          "label": "Create the chamfered main body",
+          "operation": "base",
+          "lineStart": 26,
+          "lineEnd": 33,
+          "frame": "00000007/frames/step-01.png",
+          "durationMs": 1185,
+          "code": "    # 70 x 25 x 50 body: X=[-35, 35], Y=[-25, 0], Z=[-25, 25].\n    part = (\n        cq.Workplane(\"XY\")\n        .box(70.0, 25.0, 50.0, centered=(True, True, True))\n        .translate((0.0, -12.5, 0.0))\n        .edges()\n        .chamfer(0.5)\n    )",
+          "mesh": "00000007/meshes/step-01.json"
+        },
+        {
+          "index": 1,
+          "label": "Open the central bore and radial slot",
+          "operation": "cut",
+          "lineStart": 35,
+          "lineEnd": 42,
+          "frame": "00000007/frames/step-02.png",
+          "durationMs": 1185,
+          "code": "    # Through-Z circular opening and its 2 mm-wide radial slot to the -X side.\n    circular_opening = _cylinder(10.0, 52.0, (-13.0, -12.5, -26.0), (0.0, 0.0, 1.0))\n    radial_slot = (\n        cq.Workplane(\"XY\", origin=(-24.5, -12.5, -26.0))\n        .rect(23.0, 2.0)\n        .extrude(52.0)\n    )\n    part = part.cut(circular_opening.union(radial_slot))",
+          "mesh": "00000007/meshes/step-02.json"
+        },
+        {
+          "index": 2,
+          "label": "Cut rear counterbore 1 of 2",
+          "operation": "cut",
+          "lineStart": 44,
+          "lineEnd": 48,
+          "frame": "00000007/frames/step-03.png",
+          "durationMs": 1185,
+          "code": "    # Two rear-counterbored holes on the +X side.\n    for z_pos in (-14.25, 14.25):\n        pilot = _cylinder(3.2, 18.2, (15.0, 0.0, z_pos), (0.0, -1.0, 0.0))\n        counterbore = _cylinder(5.5, 6.8, (15.0, -18.2, z_pos), (0.0, -1.0, 0.0))\n        part = part.cut(pilot.union(counterbore))",
+          "mesh": "00000007/meshes/step-03.json"
+        },
+        {
+          "index": 3,
+          "label": "Complete the rear counterbore pair",
+          "operation": "cut",
+          "lineStart": 44,
+          "lineEnd": 48,
+          "frame": "00000007/frames/step-04.png",
+          "durationMs": 1185,
+          "code": "    # Two rear-counterbored holes on the +X side.\n    for z_pos in (-14.25, 14.25):\n        pilot = _cylinder(3.2, 18.2, (15.0, 0.0, z_pos), (0.0, -1.0, 0.0))\n        counterbore = _cylinder(5.5, 6.8, (15.0, -18.2, z_pos), (0.0, -1.0, 0.0))\n        part = part.cut(pilot.union(counterbore))",
+          "mesh": "00000007/meshes/step-04.json"
+        },
+        {
+          "index": 4,
+          "label": "Cut split stepped bore 1 of 2",
+          "operation": "cut",
+          "lineStart": 50,
+          "lineEnd": 56,
+          "frame": "00000007/frames/step-05.png",
+          "durationMs": 1185,
+          "code": "    # Two split stepped holes on the -X side.  The central 2 mm of each\n    # bore is already removed by the radial slot above.\n    for z_pos in (-15.0, 15.0):\n        front_pilot = _cylinder(2.1, 11.5, (-27.5, 0.0, z_pos), (0.0, -1.0, 0.0))\n        rear_pilot = _cylinder(2.65, 5.8, (-27.5, -13.5, z_pos), (0.0, -1.0, 0.0))\n        rear_counterbore = _cylinder(5.0, 5.7, (-27.5, -19.3, z_pos), (0.0, -1.0, 0.0))\n        part = part.cut(front_pilot.union(rear_pilot).union(rear_counterbore))",
+          "mesh": "00000007/meshes/step-05.json"
+        },
+        {
+          "index": 5,
+          "label": "Complete the split stepped bores",
+          "operation": "cut",
+          "lineStart": 50,
+          "lineEnd": 56,
+          "frame": "00000007/frames/step-06.png",
+          "durationMs": 1185,
+          "code": "    # Two split stepped holes on the -X side.  The central 2 mm of each\n    # bore is already removed by the radial slot above.\n    for z_pos in (-15.0, 15.0):\n        front_pilot = _cylinder(2.1, 11.5, (-27.5, 0.0, z_pos), (0.0, -1.0, 0.0))\n        rear_pilot = _cylinder(2.65, 5.8, (-27.5, -13.5, z_pos), (0.0, -1.0, 0.0))\n        rear_counterbore = _cylinder(5.0, 5.7, (-27.5, -19.3, z_pos), (0.0, -1.0, 0.0))\n        part = part.cut(front_pilot.union(rear_pilot).union(rear_counterbore))",
+          "mesh": "00000007/meshes/step-06.json"
+        }
+      ],
+      "validation": {
+        "valid": true,
+        "solidCount": 1,
+        "volume": 66585.675398,
+        "boundingBox": {
+          "min": [
+            -35,
+            -25.005538,
+            -25.010001
+          ],
+          "max": [
+            35,
+            0.003222,
+            25.010001
+          ],
+          "size": [
+            70,
+            25.008761,
+            50.020002
+          ]
+        },
+        "lastStageSymmetricDifferenceVolume": 0,
+        "lastStageMatchesFinal": true
+      },
+      "remotion": {
+        "animation": "00000007/animation.mp4",
+        "fps": 60,
+        "durationMs": 8200,
+        "finalHoldMs": 1100
+      },
+      "modelColor": "#9694AA",
+      "colorReference": "零件素材/PNG/白色背景/00000007.png"
+    },
+    {
+      "id": "00007427",
+      "title": "Bent Sheet Z-Bracket",
+      "drawing": "00007427/drawing.png",
+      "drawingSize": [
+        1485,
+        2100
+      ],
+      "animation": "00007427/animation.webp",
+      "animationInfo": {
+        "path": "animation.webp",
+        "frameCount": 21,
+        "size": [
+          960,
+          720
+        ]
+      },
+      "frames": [
+        "00007427/frames/step-01.png",
+        "00007427/frames/step-02.png",
+        "00007427/frames/step-03.png",
+        "00007427/frames/step-04.png",
+        "00007427/frames/step-05.png",
+        "00007427/frames/step-06.png"
+      ],
+      "sourcePath": "零件素材/step/00007427.py",
+      "sourceCode": "\"\"\"Parametric CadQuery reconstruction of 00007427.step.\n\nThe part is a 2 mm bent sheet-metal Z bracket.  The bend radii and all\nmounting features are expressed as editable dimensions below.\n\"\"\"\n\nfrom pathlib import Path\n\nimport cadquery as cq\n\n\ndef _corner_relief(x_side: int, z_side: int) -> cq.Workplane:\n    \"\"\"Return the material outside a radius-5 flange corner.\"\"\"\n    x0 = 25.0 * x_side\n    z0 = 58.0 if z_side > 0 else -10.0\n    x_outer = 30.0 * x_side\n    z_outer = 63.0 if z_side > 0 else -15.0\n    diag = 5.0 / (2.0 ** 0.5)\n\n    if x_side < 0 and z_side < 0:\n        points = [(-30.0, -15.0), (-30.0, -10.0)]\n        mid, end = (-25.0 - diag, -10.0 - diag), (-25.0, -15.0)\n    elif x_side > 0 and z_side < 0:\n        points = [(25.0, -15.0), (30.0, -15.0), (30.0, -10.0)]\n        mid, end = (25.0 + diag, -10.0 - diag), (25.0, -15.0)\n    elif x_side < 0 and z_side > 0:\n        points = [(-30.0, 63.0), (-30.0, 58.0)]\n        mid, end = (-25.0 - diag, 58.0 + diag), (-25.0, 63.0)\n    else:\n        points = [(25.0, 63.0), (30.0, 63.0), (30.0, 58.0)]\n        mid, end = (25.0 + diag, 58.0 + diag), (25.0, 63.0)\n\n    wp = cq.Workplane(\"XZ\", origin=(0.0, -20.0, 0.0)).moveTo(*points[0])\n    for point in points[1:]:\n        wp = wp.lineTo(*point)\n    return wp.threePointArc(mid, end).close().extrude(44.0, both=True)\n\n\ndef _slot_y(x: float, z1: float, z2: float, radius: float) -> cq.Workplane:\n    \"\"\"Capsule cutter whose axis is parallel to global Y.\"\"\"\n    y_mid = -1.0\n    depth = 4.0\n    bridge = (\n        cq.Workplane(\"XZ\", origin=(x, y_mid, (z1 + z2) / 2.0))\n        .rect(2.0 * radius, z2 - z1)\n        .extrude(depth / 2.0, both=True)\n    )\n    end_1 = (\n        cq.Workplane(\"XZ\", origin=(x, y_mid, z1))\n        .circle(radius)\n        .extrude(depth / 2.0, both=True)\n    )\n    end_2 = (\n        cq.Workplane(\"XZ\", origin=(x, y_mid, z2))\n        .circle(radius)\n        .extrude(depth / 2.0, both=True)\n    )\n    return bridge.union(end_1).union(end_2)\n\n\ndef _hole_y(x: float, y: float, z: float, radius: float, depth: float = 4.0) -> cq.Workplane:\n    return (\n        cq.Workplane(\"XZ\", origin=(x, y, z))\n        .circle(radius)\n        .extrude(depth / 2.0, both=True)\n    )\n\n\ndef build_part() -> cq.Workplane:\n    thickness = 2.0\n    outer_bend_radius = 2.7366\n    inner_bend_radius = outer_bend_radius - thickness\n\n    # Exact YZ section of the two 90-degree bends, swept across the 60 mm width.\n    r_outer = outer_bend_radius\n    r_inner = inner_bend_radius\n    d_outer = r_outer / (2.0 ** 0.5)\n    d_inner = r_inner / (2.0 ** 0.5)\n\n    section = (\n        cq.Workplane(\"YZ\")\n        .moveTo(0.0, -15.0)\n        .lineTo(0.0, 12.2634)\n        .threePointArc((-r_outer + d_outer, 12.2634 + d_outer), (-r_outer, 15.0))\n        .lineTo(-37.2634, 15.0)\n        .threePointArc((-37.2634 - d_inner, 15.7366 - d_inner), (-38.0, 15.7366))\n        .lineTo(-38.0, 63.0)\n        .lineTo(-40.0, 63.0)\n        .lineTo(-40.0, 15.7366)\n        .threePointArc((-37.2634 - d_outer, 15.7366 - d_outer), (-37.2634, 13.0))\n        .lineTo(-2.7366, 13.0)\n        .threePointArc((-2.7366 + d_inner, 12.2634 + d_inner), (-2.0, 12.2634))\n        .lineTo(-2.0, -15.0)\n        .close()\n        .extrude(30.0, both=True)\n    )\n\n    part = section\n\n    # Radius-5 outer corners on the two vertical flanges.\n    for x_side in (-1, 1):\n        part = part.cut(_corner_relief(x_side, -1))\n        part = part.cut(_corner_relief(x_side, 1))\n\n    # Two 6.5 mm-wide vertical slots in the lower flange.\n    for x in (-15.0, 15.0):\n        part = part.cut(_slot_y(x, -9.5, 5.5, 3.25))\n\n    # Four through holes in the upper flange.\n    for x in (-17.0, 17.0):\n        for z in (32.0, 54.0):\n            part = part.cut(_hole_y(x, -39.0, z, 3.3))\n\n    return part\n\n\nresult = build_part()\n\n\nif __name__ == \"__main__\":\n    output = Path(__file__).with_name(f\"{Path(__file__).stem}_reconstructed.step\")\n    cq.exporters.export(result, str(output))\n    print(f\"Exported {output}\")\n",
+      "language": "python",
+      "steps": [
+        {
+          "index": 0,
+          "label": "Extrude the bent sheet profile",
+          "operation": "base",
+          "lineStart": 69,
+          "lineEnd": 98,
+          "frame": "00007427/frames/step-01.png",
+          "durationMs": 1185,
+          "code": "def build_part() -> cq.Workplane:\n    thickness = 2.0\n    outer_bend_radius = 2.7366\n    inner_bend_radius = outer_bend_radius - thickness\n\n    # Exact YZ section of the two 90-degree bends, swept across the 60 mm width.\n    r_outer = outer_bend_radius\n    r_inner = inner_bend_radius\n    d_outer = r_outer / (2.0 ** 0.5)\n    d_inner = r_inner / (2.0 ** 0.5)\n\n    section = (\n        cq.Workplane(\"YZ\")\n        .moveTo(0.0, -15.0)\n        .lineTo(0.0, 12.2634)\n        .threePointArc((-r_outer + d_outer, 12.2634 + d_outer), (-r_outer, 15.0))\n        .lineTo(-37.2634, 15.0)\n        .threePointArc((-37.2634 - d_inner, 15.7366 - d_inner), (-38.0, 15.7366))\n        .lineTo(-38.0, 63.0)\n        .lineTo(-40.0, 63.0)\n        .lineTo(-40.0, 15.7366)\n        .threePointArc((-37.2634 - d_outer, 15.7366 - d_outer), (-37.2634, 13.0))\n        .lineTo(-2.7366, 13.0)\n        .threePointArc((-2.7366 + d_inner, 12.2634 + d_inner), (-2.0, 12.2634))\n        .lineTo(-2.0, -15.0)\n        .close()\n        .extrude(30.0, both=True)\n    )\n\n    part = section",
+          "mesh": "00007427/meshes/step-01.json"
+        },
+        {
+          "index": 1,
+          "label": "Round the left flange corners",
+          "operation": "cut",
+          "lineStart": 100,
+          "lineEnd": 103,
+          "frame": "00007427/frames/step-02.png",
+          "durationMs": 1185,
+          "code": "    # Radius-5 outer corners on the two vertical flanges.\n    for x_side in (-1, 1):\n        part = part.cut(_corner_relief(x_side, -1))\n        part = part.cut(_corner_relief(x_side, 1))",
+          "mesh": "00007427/meshes/step-02.json"
+        },
+        {
+          "index": 2,
+          "label": "Round the right flange corners",
+          "operation": "cut",
+          "lineStart": 100,
+          "lineEnd": 103,
+          "frame": "00007427/frames/step-03.png",
+          "durationMs": 1185,
+          "code": "    # Radius-5 outer corners on the two vertical flanges.\n    for x_side in (-1, 1):\n        part = part.cut(_corner_relief(x_side, -1))\n        part = part.cut(_corner_relief(x_side, 1))",
+          "mesh": "00007427/meshes/step-03.json"
+        },
+        {
+          "index": 3,
+          "label": "Cut the lower mounting slots",
+          "operation": "cut",
+          "lineStart": 105,
+          "lineEnd": 107,
+          "frame": "00007427/frames/step-04.png",
+          "durationMs": 1185,
+          "code": "    # Two 6.5 mm-wide vertical slots in the lower flange.\n    for x in (-15.0, 15.0):\n        part = part.cut(_slot_y(x, -9.5, 5.5, 3.25))",
+          "mesh": "00007427/meshes/step-04.json"
+        },
+        {
+          "index": 4,
+          "label": "Drill the first upper hole pair",
+          "operation": "cut",
+          "lineStart": 109,
+          "lineEnd": 112,
+          "frame": "00007427/frames/step-05.png",
+          "durationMs": 1185,
+          "code": "    # Four through holes in the upper flange.\n    for x in (-17.0, 17.0):\n        for z in (32.0, 54.0):\n            part = part.cut(_hole_y(x, -39.0, z, 3.3))",
+          "mesh": "00007427/meshes/step-05.json"
+        },
+        {
+          "index": 5,
+          "label": "Complete the upper hole pattern",
+          "operation": "cut",
+          "lineStart": 109,
+          "lineEnd": 112,
+          "frame": "00007427/frames/step-06.png",
+          "durationMs": 1185,
+          "code": "    # Four through holes in the upper flange.\n    for x in (-17.0, 17.0):\n        for z in (32.0, 54.0):\n            part = part.cut(_hole_y(x, -39.0, z, 3.3))",
+          "mesh": "00007427/meshes/step-06.json"
+        }
+      ],
+      "validation": {
+        "valid": true,
+        "solidCount": 1,
+        "volume": 12901.766567,
+        "boundingBox": {
+          "min": [
+            -30.004759,
+            -40.004759,
+            -15.004759
+          ],
+          "max": [
+            30.004759,
+            0.004759,
+            63.004759
+          ],
+          "size": [
+            60.009518,
+            40.009518,
+            78.009518
+          ]
+        },
+        "lastStageSymmetricDifferenceVolume": 0,
+        "lastStageMatchesFinal": true
+      },
+      "remotion": {
+        "animation": "00007427/animation.mp4",
+        "fps": 60,
+        "durationMs": 8200,
+        "finalHoldMs": 1100
+      },
+      "modelColor": "#7CA59D",
+      "colorReference": "零件素材/PNG/白色背景/00007427.png"
+    },
+    {
+      "id": "00008454",
+      "title": "Compact Machined Clip",
+      "drawing": "00008454/drawing.png",
+      "drawingSize": [
+        1485,
+        2100
+      ],
+      "animation": "00008454/animation.webp",
+      "animationInfo": {
+        "path": "animation.webp",
+        "frameCount": 25,
+        "size": [
+          960,
+          720
+        ]
+      },
+      "frames": [
+        "00008454/frames/step-01.png",
+        "00008454/frames/step-02.png",
+        "00008454/frames/step-03.png",
+        "00008454/frames/step-04.png",
+        "00008454/frames/step-05.png",
+        "00008454/frames/step-06.png",
+        "00008454/frames/step-07.png"
+      ],
+      "sourcePath": "零件素材/step/00008454.py",
+      "sourceCode": "\"\"\"Parametric CadQuery reconstruction of part 00008454.\"\"\"\n\nfrom math import cos, pi, sin\nfrom pathlib import Path\n\nimport cadquery as cq\n\n\ndef _xz_plane(y: float) -> cq.Plane:\n    \"\"\"XZ sketch plane whose negative extrusion direction is positive Y.\"\"\"\n    return cq.Plane(\n        origin=(0.0, y, 0.0),\n        xDir=(1.0, 0.0, 0.0),\n        normal=(0.0, -1.0, 0.0),\n    )\n\n\ndef _outer_blank() -> cq.Workplane:\n    \"\"\"Extrude the fully rounded outside silhouette through 4.5 mm.\"\"\"\n    angle = 40.0 * pi / 180.0\n    nx, nz = sin(angle), cos(angle)\n\n    # The lower-left oblique edge passes through the origin.  These are the\n    # exact tangent points created by its two 1.5 mm fillets.\n    lower_center = ((1.5 + 2.5 * nz) / nx, -2.5)\n    lower_tangent = (lower_center[0] - 1.5 * nx, lower_center[1] - 1.5 * nz)\n    left_center = (1.5, 1.5 * (1.0 - nx) / nz)\n    left_tangent = (left_center[0] - 1.5 * nx, left_center[1] - 1.5 * nz)\n\n    profile = (\n        cq.Workplane(_xz_plane(0.0))\n        .moveTo(0.4, 6.0)\n        .lineTo(8.5, 6.0)\n        .threePointArc((8.5 + 1.5 / 2.0**0.5, 4.5 + 1.5 / 2.0**0.5), (10.0, 4.5))\n        .lineTo(10.0, -2.5)\n        .threePointArc((8.5 + 1.5 / 2.0**0.5, -2.5 - 1.5 / 2.0**0.5), (8.5, -4.0))\n        .lineTo(lower_center[0], -4.0)\n        .threePointArc(\n            (\n                lower_center[0] + 1.5 * cos(-110.0 * pi / 180.0),\n                lower_center[1] + 1.5 * sin(-110.0 * pi / 180.0),\n            ),\n            lower_tangent,\n        )\n        .lineTo(*left_tangent)\n        .threePointArc(\n            (\n                left_center[0] + 1.5 * cos(-155.0 * pi / 180.0),\n                left_center[1] + 1.5 * sin(-155.0 * pi / 180.0),\n            ),\n            (0.0, left_center[1]),\n        )\n        .lineTo(0.0, 5.6)\n        .threePointArc(\n            (0.4 + 0.4 * cos(135.0 * pi / 180.0), 5.6 + 0.4 * sin(135.0 * pi / 180.0)),\n            (0.4, 6.0),\n        )\n        .close()\n    )\n    return profile.extrude(-4.5)\n\n\ndef _shallow_upper_pocket() -> cq.Workplane:\n    \"\"\"Upper open pocket, 2 mm deep from the rear face.\"\"\"\n    return (\n        cq.Workplane(_xz_plane(0.0))\n        .moveTo(2.0, 7.0)\n        .lineTo(2.0, 4.5)\n        .threePointArc((2.43934, 3.43934), (3.5, 3.0))\n        .lineTo(11.0, 3.0)\n        .lineTo(11.0, 7.0)\n        .close()\n        .extrude(-2.0)\n    )\n\n\ndef _deep_right_pocket() -> cq.Workplane:\n    \"\"\"Right-hand continuation of the open pocket, 3.5 mm deep.\"\"\"\n    return (\n        cq.Workplane(_xz_plane(0.0))\n        .moveTo(7.3, 7.0)\n        .lineTo(7.3, 2.0)\n        .threePointArc((7.592893, 1.292893), (8.3, 1.0))\n        .lineTo(8.9, 1.0)\n        .threePointArc((9.677817, 0.677817), (10.0, -0.1))\n        .lineTo(11.0, -0.1)\n        .lineTo(11.0, 7.0)\n        .close()\n        .extrude(-3.5)\n    )\n\n\ndef _front_profile_pocket() -> cq.Workplane:\n    \"\"\"The 0.8 mm deep multi-radius front recess.\"\"\"\n    r = 0.5\n    root2 = 2.0**0.5\n    return (\n        cq.Workplane(_xz_plane(3.7))\n        .moveTo(4.9, -1.5)\n        .lineTo(6.3, -1.5)\n        .threePointArc((6.8 - r / root2, -1.5 - r / root2), (6.8, -2.0))\n        .threePointArc((7.3, -1.5), (6.8, -1.0))\n        .lineTo(6.8, 2.0)\n        .threePointArc((6.8 + r / root2, 2.5 + r / root2), (6.3, 2.5))\n        .lineTo(4.9, 2.5)\n        .threePointArc((4.4 - r / root2, 2.5 + r / root2), (4.4, 2.0))\n        .lineTo(4.4, -1.0)\n        .threePointArc((3.9, -1.5), (4.4, -2.0))\n        .threePointArc((4.4 + r / root2, -1.5 - r / root2), (4.9, -1.5))\n        .close()\n        .extrude(-0.8)\n    )\n\n\ndef build_part() -> cq.Workplane:\n    \"\"\"Build all editable extrusions, pockets, slots, and drilled holes.\"\"\"\n    part = _outer_blank()\n    part = part.cut(_shallow_upper_pocket())\n    part = part.cut(_deep_right_pocket())\n\n    # Vertical blind bore, open through the top face.\n    top_bore = cq.Solid.makeCylinder(\n        1.0, 2.2, cq.Vector(1.5, 3.1, 3.9), cq.Vector(0.0, 0.0, 1.0)\n    )\n    part = part.cut(cq.Workplane(obj=top_bore))\n\n    # Two narrow U-notches in the top edge, starting at the y=2 step.\n    for x in (4.57, 6.70):\n        notch = cq.Solid.makeCylinder(\n            0.13, 2.5, cq.Vector(x, 2.0, 5.88), cq.Vector(0.0, 1.0, 0.0)\n        )\n        notch_mouth = cq.Solid.makeBox(\n            0.26, 2.5, 0.2, cq.Vector(x - 0.13, 2.0, 5.88)\n        )\n        part = part.cut(cq.Workplane(obj=notch.fuse(notch_mouth)))\n\n    # Front face recess and the separate 1 mm diameter bore above it.\n    part = part.cut(_front_profile_pocket())\n    front_bore = cq.Solid.makeCylinder(\n        0.5, 1.0, cq.Vector(8.5, 3.5, 4.5), cq.Vector(0.0, 1.0, 0.0)\n    )\n    part = part.cut(cq.Workplane(obj=front_bore))\n\n    return part\n\n\nresult = build_part()\n\n\nif __name__ == \"__main__\":\n    output = Path(__file__).with_name(f\"{Path(__file__).stem}_reconstructed.step\")\n    cq.exporters.export(result, str(output))\n    print(f\"Exported {output}\")\n",
+      "language": "python",
+      "steps": [
+        {
+          "index": 0,
+          "label": "Extrude the rounded outer blank",
+          "operation": "base",
+          "lineStart": 115,
+          "lineEnd": 117,
+          "frame": "00008454/frames/step-01.png",
+          "durationMs": 1185,
+          "code": "def build_part() -> cq.Workplane:\n    \"\"\"Build all editable extrusions, pockets, slots, and drilled holes.\"\"\"\n    part = _outer_blank()",
+          "mesh": "00008454/meshes/step-01.json"
+        },
+        {
+          "index": 1,
+          "label": "Cut the shallow upper pocket",
+          "operation": "cut",
+          "lineStart": 118,
+          "lineEnd": 118,
+          "frame": "00008454/frames/step-02.png",
+          "durationMs": 1185,
+          "code": "    part = part.cut(_shallow_upper_pocket())",
+          "mesh": "00008454/meshes/step-02.json"
+        },
+        {
+          "index": 2,
+          "label": "Extend the deep side pocket",
+          "operation": "cut",
+          "lineStart": 119,
+          "lineEnd": 119,
+          "frame": "00008454/frames/step-03.png",
+          "durationMs": 1185,
+          "code": "    part = part.cut(_deep_right_pocket())",
+          "mesh": "00008454/meshes/step-03.json"
+        },
+        {
+          "index": 3,
+          "label": "Drill the vertical blind bore",
+          "operation": "cut",
+          "lineStart": 121,
+          "lineEnd": 125,
+          "frame": "00008454/frames/step-04.png",
+          "durationMs": 1185,
+          "code": "    # Vertical blind bore, open through the top face.\n    top_bore = cq.Solid.makeCylinder(\n        1.0, 2.2, cq.Vector(1.5, 3.1, 3.9), cq.Vector(0.0, 0.0, 1.0)\n    )\n    part = part.cut(cq.Workplane(obj=top_bore))",
+          "mesh": "00008454/meshes/step-04.json"
+        },
+        {
+          "index": 4,
+          "label": "Cut the paired top notches",
+          "operation": "cut",
+          "lineStart": 127,
+          "lineEnd": 135,
+          "frame": "00008454/frames/step-05.png",
+          "durationMs": 1185,
+          "code": "    # Two narrow U-notches in the top edge, starting at the y=2 step.\n    for x in (4.57, 6.70):\n        notch = cq.Solid.makeCylinder(\n            0.13, 2.5, cq.Vector(x, 2.0, 5.88), cq.Vector(0.0, 1.0, 0.0)\n        )\n        notch_mouth = cq.Solid.makeBox(\n            0.26, 2.5, 0.2, cq.Vector(x - 0.13, 2.0, 5.88)\n        )\n        part = part.cut(cq.Workplane(obj=notch.fuse(notch_mouth)))",
+          "mesh": "00008454/meshes/step-05.json"
+        },
+        {
+          "index": 5,
+          "label": "Machine the front profile recess",
+          "operation": "cut",
+          "lineStart": 137,
+          "lineEnd": 138,
+          "frame": "00008454/frames/step-06.png",
+          "durationMs": 1185,
+          "code": "    # Front face recess and the separate 1 mm diameter bore above it.\n    part = part.cut(_front_profile_pocket())",
+          "mesh": "00008454/meshes/step-06.json"
+        },
+        {
+          "index": 6,
+          "label": "Finish with the front bore",
+          "operation": "cut",
+          "lineStart": 139,
+          "lineEnd": 142,
+          "frame": "00008454/frames/step-07.png",
+          "durationMs": 1185,
+          "code": "    front_bore = cq.Solid.makeCylinder(\n        0.5, 1.0, cq.Vector(8.5, 3.5, 4.5), cq.Vector(0.0, 1.0, 0.0)\n    )\n    part = part.cut(cq.Workplane(obj=front_bore))",
+          "mesh": "00008454/meshes/step-07.json"
+        }
+      ],
+      "validation": {
+        "valid": true,
+        "solidCount": 1,
+        "volume": 308.353795,
+        "boundingBox": {
+          "min": [
+            -0.001428,
+            -0.001428,
+            -4.001428
+          ],
+          "max": [
+            10.001428,
+            4.501428,
+            6.001428
+          ],
+          "size": [
+            10.002856,
+            4.502856,
+            10.002856
+          ]
+        },
+        "lastStageSymmetricDifferenceVolume": 0,
+        "lastStageMatchesFinal": true
+      },
+      "remotion": {
+        "animation": "00008454/animation.mp4",
+        "fps": 60,
+        "durationMs": 9383,
+        "finalHoldMs": 1100
+      },
+      "modelColor": "#7996B3",
+      "colorReference": "零件素材/PNG/白色背景/00008454.png"
+    },
+    {
+      "id": "00008848",
+      "title": "Gusseted Mounting Bracket",
+      "drawing": "00008848/drawing.png",
+      "drawingSize": [
+        1485,
+        2100
+      ],
+      "animation": "00008848/animation.webp",
+      "animationInfo": {
+        "path": "animation.webp",
+        "frameCount": 21,
+        "size": [
+          960,
+          720
+        ]
+      },
+      "frames": [
+        "00008848/frames/step-01.png",
+        "00008848/frames/step-02.png",
+        "00008848/frames/step-03.png",
+        "00008848/frames/step-04.png",
+        "00008848/frames/step-05.png",
+        "00008848/frames/step-06.png"
+      ],
+      "sourcePath": "零件素材/step/00008848.py",
+      "sourceCode": "\"\"\"Parametric CadQuery reconstruction of 00008848.step.\n\nThe model consists of a drilled base plate, a full-width rear upright, and\ntwo identical outer gussets.  Dimensions are in millimetres.\n\"\"\"\n\nfrom pathlib import Path\n\nimport cadquery as cq\n\n\ndef _cylinder(\n    radius: float,\n    length: float,\n    origin: tuple[float, float, float],\n    direction: tuple[float, float, float],\n) -> cq.Workplane:\n    \"\"\"Create a cylindrical cutting tool along a global direction.\"\"\"\n\n    return cq.Workplane(cq.Plane(origin=origin, normal=direction)).circle(radius).extrude(length)\n\n\ndef _gusset(y_start: float, extrusion: float) -> cq.Workplane:\n    \"\"\"Extrude the XZ gusset section eight millimetres along Y.\"\"\"\n\n    section = [\n        (-21.0, 6.0),\n        (-21.0, 16.0),\n        (34.0, 51.0),\n        (44.0, 51.0),\n        (44.0, 6.0),\n    ]\n    plane = cq.Plane(\n        origin=(0.0, y_start, 0.0),\n        xDir=(1.0, 0.0, 0.0),\n        # Keeping one plane orientation preserves local +Y as global +Z.\n        normal=(0.0, -1.0, 0.0),\n    )\n    return cq.Workplane(plane).polyline(section).close().extrude(extrusion)\n\n\ndef build_part() -> cq.Workplane:\n    \"\"\"Build the editable CAD model in the source STEP coordinate system.\"\"\"\n\n    # Six-millimetre base plate: X=[-29,52], Y=[-45,45], Z=[0,6].\n    base = (\n        cq.Workplane(\"XY\")\n        .box(81.0, 90.0, 6.0, centered=(True, True, True))\n        .translate((11.5, 0.0, 3.0))\n    )\n\n    # Rear upright: X=[44,52], Y=[-45,45], Z=[0,60].\n    upright = (\n        cq.Workplane(\"XY\")\n        .box(8.0, 90.0, 60.0, centered=(True, True, True))\n        .translate((48.0, 0.0, 30.0))\n    )\n\n    # Matching 8 mm outer ribs at both Y edges.\n    part = base.union(upright)\n    part = part.union(_gusset(-37.0, 8.0)).union(_gusset(37.0, -8.0))\n\n    # Main base opening and eight M3-class clearance holes.\n    part = part.cut(_cylinder(19.1, 6.0, (0.0, 0.0, 0.0), (0.0, 0.0, 1.0)))\n    small_hole_centres = [\n        (-20.0, -17.5),\n        (-20.0, 17.5),\n        (20.0, -17.5),\n        (20.0, 17.5),\n        (-23.57, -23.57),\n        (-23.57, 23.57),\n        (23.57, -23.57),\n        (23.57, 23.57),\n    ]\n    for x_pos, y_pos in small_hole_centres:\n        part = part.cut(_cylinder(1.65, 6.0, (x_pos, y_pos, 0.0), (0.0, 0.0, 1.0)))\n\n    # Four transverse holes through the eight-millimetre rear upright.\n    for y_pos in (-25.0, 25.0):\n        for z_pos in (30.0, 55.0):\n            part = part.cut(_cylinder(2.5, 8.0, (44.0, y_pos, z_pos), (1.0, 0.0, 0.0)))\n\n    return part\n\n\nresult = build_part()\n\n\nif __name__ == \"__main__\":\n    output_path = Path(__file__).with_name(f\"{Path(__file__).stem}_reconstructed.step\")\n    cq.exporters.export(result, str(output_path))\n    print(f\"Wrote {output_path}\")\n",
+      "language": "python",
+      "steps": [
+        {
+          "index": 0,
+          "label": "Join the base plate and upright",
+          "operation": "base",
+          "lineStart": 45,
+          "lineEnd": 60,
+          "frame": "00008848/frames/step-01.png",
+          "durationMs": 1185,
+          "code": "    # Six-millimetre base plate: X=[-29,52], Y=[-45,45], Z=[0,6].\n    base = (\n        cq.Workplane(\"XY\")\n        .box(81.0, 90.0, 6.0, centered=(True, True, True))\n        .translate((11.5, 0.0, 3.0))\n    )\n\n    # Rear upright: X=[44,52], Y=[-45,45], Z=[0,60].\n    upright = (\n        cq.Workplane(\"XY\")\n        .box(8.0, 90.0, 60.0, centered=(True, True, True))\n        .translate((48.0, 0.0, 30.0))\n    )\n\n    # Matching 8 mm outer ribs at both Y edges.\n    part = base.union(upright)",
+          "mesh": "00008848/meshes/step-01.json"
+        },
+        {
+          "index": 1,
+          "label": "Add the two outer gussets",
+          "operation": "union",
+          "lineStart": 59,
+          "lineEnd": 61,
+          "frame": "00008848/frames/step-02.png",
+          "durationMs": 1185,
+          "code": "    # Matching 8 mm outer ribs at both Y edges.\n    part = base.union(upright)\n    part = part.union(_gusset(-37.0, 8.0)).union(_gusset(37.0, -8.0))",
+          "mesh": "00008848/meshes/step-02.json"
+        },
+        {
+          "index": 2,
+          "label": "Cut the main base opening",
+          "operation": "cut",
+          "lineStart": 63,
+          "lineEnd": 64,
+          "frame": "00008848/frames/step-03.png",
+          "durationMs": 1185,
+          "code": "    # Main base opening and eight M3-class clearance holes.\n    part = part.cut(_cylinder(19.1, 6.0, (0.0, 0.0, 0.0), (0.0, 0.0, 1.0)))",
+          "mesh": "00008848/meshes/step-03.json"
+        },
+        {
+          "index": 3,
+          "label": "Drill the first base-hole group",
+          "operation": "cut",
+          "lineStart": 65,
+          "lineEnd": 76,
+          "frame": "00008848/frames/step-04.png",
+          "durationMs": 1185,
+          "code": "    small_hole_centres = [\n        (-20.0, -17.5),\n        (-20.0, 17.5),\n        (20.0, -17.5),\n        (20.0, 17.5),\n        (-23.57, -23.57),\n        (-23.57, 23.57),\n        (23.57, -23.57),\n        (23.57, 23.57),\n    ]\n    for x_pos, y_pos in small_hole_centres:\n        part = part.cut(_cylinder(1.65, 6.0, (x_pos, y_pos, 0.0), (0.0, 0.0, 1.0)))",
+          "mesh": "00008848/meshes/step-04.json"
+        },
+        {
+          "index": 4,
+          "label": "Complete the eight base holes",
+          "operation": "cut",
+          "lineStart": 65,
+          "lineEnd": 76,
+          "frame": "00008848/frames/step-05.png",
+          "durationMs": 1185,
+          "code": "    small_hole_centres = [\n        (-20.0, -17.5),\n        (-20.0, 17.5),\n        (20.0, -17.5),\n        (20.0, 17.5),\n        (-23.57, -23.57),\n        (-23.57, 23.57),\n        (23.57, -23.57),\n        (23.57, 23.57),\n    ]\n    for x_pos, y_pos in small_hole_centres:\n        part = part.cut(_cylinder(1.65, 6.0, (x_pos, y_pos, 0.0), (0.0, 0.0, 1.0)))",
+          "mesh": "00008848/meshes/step-05.json"
+        },
+        {
+          "index": 5,
+          "label": "Drill the upright hole pattern",
+          "operation": "cut",
+          "lineStart": 78,
+          "lineEnd": 81,
+          "frame": "00008848/frames/step-06.png",
+          "durationMs": 1185,
+          "code": "    # Four transverse holes through the eight-millimetre rear upright.\n    for y_pos in (-25.0, 25.0):\n        for z_pos in (30.0, 55.0):\n            part = part.cut(_cylinder(2.5, 8.0, (44.0, y_pos, z_pos), (1.0, 0.0, 0.0)))",
+          "mesh": "00008848/meshes/step-06.json"
+        }
+      ],
+      "validation": {
+        "valid": true,
+        "solidCount": 1,
+        "volume": 106104.631646,
+        "boundingBox": {
+          "min": [
+            -29,
+            -45,
+            -0.019233
+          ],
+          "max": [
+            52.002517,
+            45,
+            60
+          ],
+          "size": [
+            81.002518,
+            90,
+            60.019233
+          ]
+        },
+        "lastStageSymmetricDifferenceVolume": 0,
+        "lastStageMatchesFinal": true
+      },
+      "remotion": {
+        "animation": "00008848/animation.mp4",
+        "fps": 60,
+        "durationMs": 8200,
+        "finalHoldMs": 1100
+      },
+      "modelColor": "#B69F6C",
+      "colorReference": "零件素材/PNG/白色背景/00008848.png"
+    },
+    {
+      "id": "00009733",
+      "title": "Slotted Support Arm",
+      "drawing": "00009733/drawing.png",
+      "drawingSize": [
+        1485,
+        2100
+      ],
+      "animation": "00009733/animation.webp",
+      "animationInfo": {
+        "path": "animation.webp",
+        "frameCount": 25,
+        "size": [
+          960,
+          720
+        ]
+      },
+      "frames": [
+        "00009733/frames/step-01.png",
+        "00009733/frames/step-02.png",
+        "00009733/frames/step-03.png",
+        "00009733/frames/step-04.png",
+        "00009733/frames/step-05.png",
+        "00009733/frames/step-06.png",
+        "00009733/frames/step-07.png"
+      ],
+      "sourcePath": "零件素材/step/00009733.py",
+      "sourceCode": "\"\"\"Parametric CadQuery reconstruction of 00009733.step.\"\"\"\n\nfrom pathlib import Path\n\nimport cadquery as cq\n\n\nSQRT2 = 2.0 ** 0.5\n\n\ndef _front_chamfer(x_side: int) -> cq.Workplane:\n    \"\"\"2 mm chamfer at an X edge of the open front end.\"\"\"\n    if x_side < 0:\n        pts = [(10.0, -25.0), (12.0, -25.0), (10.0, -23.0)]\n    else:\n        pts = [(30.0, -25.0), (30.0, -23.0), (28.0, -25.0)]\n    return (\n        cq.Workplane(\"XY\", origin=(0.0, 0.0, 0.0))\n        .moveTo(*pts[0])\n        .lineTo(*pts[1])\n        .lineTo(*pts[2])\n        .close()\n        .extrude(11.0, both=True)\n    )\n\n\ndef _tower_corner_chamfer(x_side: int, z_side: int) -> cq.Workplane:\n    \"\"\"3 mm chamfer at one long edge of the rear/tall flange.\"\"\"\n    if x_side < 0 and z_side < 0:\n        pts = [(10.0, -35.0), (13.0, -35.0), (10.0, -32.0)]\n    elif x_side > 0 and z_side < 0:\n        pts = [(30.0, -35.0), (30.0, -32.0), (27.0, -35.0)]\n    elif x_side < 0 and z_side > 0:\n        pts = [(10.0, 35.0), (10.0, 32.0), (13.0, 35.0)]\n    else:\n        pts = [(30.0, 35.0), (27.0, 35.0), (30.0, 32.0)]\n    return (\n        cq.Workplane(\"XZ\", origin=(0.0, 19.0, 0.0))\n        .moveTo(*pts[0])\n        .lineTo(*pts[1])\n        .lineTo(*pts[2])\n        .close()\n        .extrude(7.0, both=True)\n    )\n\n\ndef _x_cylinder(y: float, z: float, radius: float, depth: float = 22.0) -> cq.Workplane:\n    return (\n        cq.Workplane(\"YZ\", origin=(20.0, y, z))\n        .circle(radius)\n        .extrude(depth / 2.0, both=True)\n    )\n\n\ndef _open_keyhole() -> cq.Workplane:\n    \"\"\"1 mm open slit with an R6 enlargement and rounded blind end.\"\"\"\n    depth = 22.0\n    bridge = (\n        cq.Workplane(\"YZ\", origin=(20.0, (-26.0 + 1.5) / 2.0, 0.0))\n        .rect(27.5, 1.0)\n        .extrude(depth / 2.0, both=True)\n    )\n    return bridge.union(_x_cylinder(-7.0, 0.0, 6.0, depth)).union(\n        _x_cylinder(1.5, 0.0, 0.5, depth)\n    )\n\n\ndef _slot_y(z: float, radius: float, y0: float, y1: float) -> cq.Workplane:\n    \"\"\"Horizontal capsule slot with endpoint centers at X=17.5 and 22.5.\"\"\"\n    ym = (y0 + y1) / 2.0\n    depth = y1 - y0\n    bridge = (\n        cq.Workplane(\"XZ\", origin=(20.0, ym, z))\n        .rect(5.0, 2.0 * radius)\n        .extrude(depth / 2.0, both=True)\n    )\n    left = (\n        cq.Workplane(\"XZ\", origin=(17.5, ym, z))\n        .circle(radius)\n        .extrude(depth / 2.0, both=True)\n    )\n    right = (\n        cq.Workplane(\"XZ\", origin=(22.5, ym, z))\n        .circle(radius)\n        .extrude(depth / 2.0, both=True)\n    )\n    return bridge.union(left).union(right)\n\n\ndef _z_bore(radius: float, z0: float, z1: float) -> cq.Workplane:\n    return (\n        cq.Workplane(\"XY\", origin=(20.0, -19.0, z0))\n        .circle(radius)\n        .extrude(z1 - z0)\n    )\n\n\ndef build_part() -> cq.Workplane:\n    r = 2.0\n    d = r / SQRT2\n\n    # Side profile of the arm and tall rear flange, including the two R2 roots.\n    part = (\n        cq.Workplane(\"YZ\", origin=(20.0, 0.0, 0.0))\n        .moveTo(-25.0, -10.0)\n        .lineTo(11.0, -10.0)\n        .threePointArc((11.0 + d, -12.0 + d), (13.0, -12.0))\n        .lineTo(13.0, -35.0)\n        .lineTo(25.0, -35.0)\n        .lineTo(25.0, 35.0)\n        .lineTo(13.0, 35.0)\n        .lineTo(13.0, 12.0)\n        .threePointArc((11.0 + d, 12.0 - d), (11.0, 10.0))\n        .lineTo(-25.0, 10.0)\n        .close()\n        .extrude(10.0, both=True)\n    )\n\n    # Edge preparation on the open arm and on the tall flange.\n    part = part.cut(_front_chamfer(-1)).cut(_front_chamfer(1))\n    for xs in (-1, 1):\n        for zs in (-1, 1):\n            part = part.cut(_tower_corner_chamfer(xs, zs))\n\n    # Open center slit/keyhole through the full 20 mm width.\n    part = part.cut(_open_keyhole())\n\n    # Vertical stepped bore, intersected at mid-height by the open slit.\n    part = part.cut(_z_bore(2.5, -11.0, 0.5))\n    part = part.cut(_z_bore(3.3, 0.5, 3.2))\n    part = part.cut(_z_bore(5.5, 3.2, 11.0))\n\n    # Two rear mounting slots: R6.5 counterbore, then R3.5 through-slot.\n    for z in (-25.0, 25.0):\n        part = part.cut(_slot_y(z, 6.5, 13.0, 20.0))\n        part = part.cut(_slot_y(z, 3.5, 20.0, 25.5))\n\n    return part\n\n\nresult = build_part()\n\n\nif __name__ == \"__main__\":\n    output = Path(__file__).with_name(f\"{Path(__file__).stem}_reconstructed.step\")\n    cq.exporters.export(result, str(output))\n    print(f\"Exported {output}\")\n",
+      "language": "python",
+      "steps": [
+        {
+          "index": 0,
+          "label": "Extrude the arm and rear flange",
+          "operation": "base",
+          "lineStart": 102,
+          "lineEnd": 117,
+          "frame": "00009733/frames/step-01.png",
+          "durationMs": 1185,
+          "code": "    # Side profile of the arm and tall rear flange, including the two R2 roots.\n    part = (\n        cq.Workplane(\"YZ\", origin=(20.0, 0.0, 0.0))\n        .moveTo(-25.0, -10.0)\n        .lineTo(11.0, -10.0)\n        .threePointArc((11.0 + d, -12.0 + d), (13.0, -12.0))\n        .lineTo(13.0, -35.0)\n        .lineTo(25.0, -35.0)\n        .lineTo(25.0, 35.0)\n        .lineTo(13.0, 35.0)\n        .lineTo(13.0, 12.0)\n        .threePointArc((11.0 + d, 12.0 - d), (11.0, 10.0))\n        .lineTo(-25.0, 10.0)\n        .close()\n        .extrude(10.0, both=True)\n    )",
+          "mesh": "00009733/meshes/step-01.json"
+        },
+        {
+          "index": 1,
+          "label": "Chamfer the open arm",
+          "operation": "cut",
+          "lineStart": 119,
+          "lineEnd": 120,
+          "frame": "00009733/frames/step-02.png",
+          "durationMs": 1185,
+          "code": "    # Edge preparation on the open arm and on the tall flange.\n    part = part.cut(_front_chamfer(-1)).cut(_front_chamfer(1))",
+          "mesh": "00009733/meshes/step-02.json"
+        },
+        {
+          "index": 2,
+          "label": "Chamfer the tall flange edges",
+          "operation": "cut",
+          "lineStart": 121,
+          "lineEnd": 123,
+          "frame": "00009733/frames/step-03.png",
+          "durationMs": 1185,
+          "code": "    for xs in (-1, 1):\n        for zs in (-1, 1):\n            part = part.cut(_tower_corner_chamfer(xs, zs))",
+          "mesh": "00009733/meshes/step-03.json"
+        },
+        {
+          "index": 3,
+          "label": "Open the central keyhole slit",
+          "operation": "cut",
+          "lineStart": 125,
+          "lineEnd": 126,
+          "frame": "00009733/frames/step-04.png",
+          "durationMs": 1185,
+          "code": "    # Open center slit/keyhole through the full 20 mm width.\n    part = part.cut(_open_keyhole())",
+          "mesh": "00009733/meshes/step-04.json"
+        },
+        {
+          "index": 4,
+          "label": "Complete the vertical stepped bore",
+          "operation": "cut",
+          "lineStart": 128,
+          "lineEnd": 131,
+          "frame": "00009733/frames/step-05.png",
+          "durationMs": 1185,
+          "code": "    # Vertical stepped bore, intersected at mid-height by the open slit.\n    part = part.cut(_z_bore(2.5, -11.0, 0.5))\n    part = part.cut(_z_bore(3.3, 0.5, 3.2))\n    part = part.cut(_z_bore(5.5, 3.2, 11.0))",
+          "mesh": "00009733/meshes/step-05.json"
+        },
+        {
+          "index": 5,
+          "label": "Cut the first rear mounting slot",
+          "operation": "cut",
+          "lineStart": 133,
+          "lineEnd": 136,
+          "frame": "00009733/frames/step-06.png",
+          "durationMs": 1185,
+          "code": "    # Two rear mounting slots: R6.5 counterbore, then R3.5 through-slot.\n    for z in (-25.0, 25.0):\n        part = part.cut(_slot_y(z, 6.5, 13.0, 20.0))\n        part = part.cut(_slot_y(z, 3.5, 20.0, 25.5))",
+          "mesh": "00009733/meshes/step-06.json"
+        },
+        {
+          "index": 6,
+          "label": "Complete the rear mounting slots",
+          "operation": "cut",
+          "lineStart": 133,
+          "lineEnd": 136,
+          "frame": "00009733/frames/step-07.png",
+          "durationMs": 1185,
+          "code": "    # Two rear mounting slots: R6.5 counterbore, then R3.5 through-slot.\n    for z in (-25.0, 25.0):\n        part = part.cut(_slot_y(z, 6.5, 13.0, 20.0))\n        part = part.cut(_slot_y(z, 3.5, 20.0, 25.5))",
+          "mesh": "00009733/meshes/step-07.json"
+        }
+      ],
+      "validation": {
+        "valid": true,
+        "solidCount": 1,
+        "volume": 24754.030458,
+        "boundingBox": {
+          "min": [
+            9.99426,
+            -25,
+            -35
+          ],
+          "max": [
+            30.00574,
+            25.003524,
+            35
+          ],
+          "size": [
+            20.011481,
+            50.003524,
+            70
+          ]
+        },
+        "lastStageSymmetricDifferenceVolume": 0,
+        "lastStageMatchesFinal": true
+      },
+      "remotion": {
+        "animation": "00009733/animation.mp4",
+        "fps": 60,
+        "durationMs": 9383,
+        "finalHoldMs": 1100
+      },
+      "modelColor": "#B08265",
+      "colorReference": "零件素材/PNG/白色背景/00009733.png"
+    },
+    {
+      "id": "00039492",
+      "title": "Stepped Flange Hub",
+      "drawing": "00039492/drawing.png",
+      "drawingSize": [
+        1485,
+        2100
+      ],
+      "animation": "00039492/animation.webp",
+      "animationInfo": {
+        "path": "animation.webp",
+        "frameCount": 29,
+        "size": [
+          960,
+          720
+        ]
+      },
+      "frames": [
+        "00039492/frames/step-01.png",
+        "00039492/frames/step-02.png",
+        "00039492/frames/step-03.png",
+        "00039492/frames/step-04.png",
+        "00039492/frames/step-05.png",
+        "00039492/frames/step-06.png",
+        "00039492/frames/step-07.png",
+        "00039492/frames/step-08.png"
+      ],
+      "sourcePath": "零件素材/step/00039492.py",
+      "sourceCode": "\"\"\"Parametric CadQuery reconstruction of part 00039492.\"\"\"\n\nfrom pathlib import Path\n\nimport cadquery as cq\n\n\ndef _axial_cylinder(radius: float, y0: float, length: float, x=0.0, z=0.0):\n    return cq.Solid.makeCylinder(\n        radius,\n        length,\n        cq.Vector(x, y0, z),\n        cq.Vector(0.0, 1.0, 0.0),\n    )\n\n\ndef build_part() -> cq.Workplane:\n    \"\"\"Build the stepped flange and all editable bores in source coordinates.\"\"\"\n    # Three coaxial outside diameters.\n    flange = _axial_cylinder(17.25, -3.0, 8.0)\n    front_register = _axial_cylinder(15.0, 5.0, 3.0)\n\n    # The rear boss is a radius-8.5 cylinder with two 16 mm wide flats.\n    rear_round = _axial_cylinder(8.5, -8.0, 5.0)\n    rear_flat_limit = cq.Solid.makeBox(\n        16.0, 5.0, 20.0, cq.Vector(-8.0, -8.0, -10.0)\n    )\n    rear_boss = rear_round.intersect(rear_flat_limit)\n\n    part = cq.Workplane(obj=flange).union(cq.Workplane(obj=front_register))\n    part = part.union(cq.Workplane(obj=rear_boss))\n\n    # Central through bore and its rear rounded-square counterbore.  The\n    # latter is the exact intersection of a radius-6.85 disk and a 12.3 mm\n    # square, extruded for the rear 3 mm.\n    part = part.cut(cq.Workplane(obj=_axial_cylinder(4.0, -5.0, 13.0)))\n    counterbore_round = _axial_cylinder(6.85, -8.0, 3.0)\n    counterbore_flats = cq.Solid.makeBox(\n        12.3, 3.0, 12.3, cq.Vector(-6.15, -8.0, -6.15)\n    )\n    counterbore = counterbore_round.intersect(counterbore_flats)\n    part = part.cut(cq.Workplane(obj=counterbore))\n\n    # Opposed stepped mounting holes.\n    for z in (-11.0, 11.0):\n        part = part.cut(\n            cq.Workplane(obj=_axial_cylinder(4.0, -8.0, 9.4, z=z))\n        )\n        part = part.cut(\n            cq.Workplane(obj=_axial_cylinder(2.25, 1.4, 6.6, z=z))\n        )\n\n    # A radial capsule slot: 3 mm wide, 4 mm overall, directed at 45 degrees.\n    xz_plane = cq.Plane(\n        origin=(0.0, -3.0, 0.0),\n        xDir=(1.0, 0.0, 0.0),\n        normal=(0.0, -1.0, 0.0),\n    )\n    diagonal_slot = (\n        cq.Workplane(xz_plane)\n        .center(12.0 / (2.0 ** 0.5), 12.0 / (2.0 ** 0.5))\n        .slot2D(4.0, 3.0, 45.0)\n        .extrude(-11.0)\n    )\n    part = part.cut(diagonal_slot)\n\n    # Cross-drilled lubrication hole through both walls of the rear boss.\n    cross_hole = cq.Solid.makeCylinder(\n        0.8,\n        18.0,\n        cq.Vector(-9.0, -6.5, 0.0),\n        cq.Vector(1.0, 0.0, 0.0),\n    )\n    part = part.cut(cq.Workplane(obj=cross_hole))\n\n    return part\n\n\nresult = build_part()\n\n\nif __name__ == \"__main__\":\n    output = Path(__file__).with_name(f\"{Path(__file__).stem}_reconstructed.step\")\n    cq.exporters.export(result, str(output))\n    print(f\"Exported {output}\")\n",
+      "language": "python",
+      "steps": [
+        {
+          "index": 0,
+          "label": "Join the flange and front register",
+          "operation": "base",
+          "lineStart": 19,
+          "lineEnd": 30,
+          "frame": "00039492/frames/step-01.png",
+          "durationMs": 1185,
+          "code": "    # Three coaxial outside diameters.\n    flange = _axial_cylinder(17.25, -3.0, 8.0)\n    front_register = _axial_cylinder(15.0, 5.0, 3.0)\n\n    # The rear boss is a radius-8.5 cylinder with two 16 mm wide flats.\n    rear_round = _axial_cylinder(8.5, -8.0, 5.0)\n    rear_flat_limit = cq.Solid.makeBox(\n        16.0, 5.0, 20.0, cq.Vector(-8.0, -8.0, -10.0)\n    )\n    rear_boss = rear_round.intersect(rear_flat_limit)\n\n    part = cq.Workplane(obj=flange).union(cq.Workplane(obj=front_register))",
+          "mesh": "00039492/meshes/step-01.json"
+        },
+        {
+          "index": 1,
+          "label": "Add the flat-sided rear boss",
+          "operation": "union",
+          "lineStart": 23,
+          "lineEnd": 31,
+          "frame": "00039492/frames/step-02.png",
+          "durationMs": 1185,
+          "code": "    # The rear boss is a radius-8.5 cylinder with two 16 mm wide flats.\n    rear_round = _axial_cylinder(8.5, -8.0, 5.0)\n    rear_flat_limit = cq.Solid.makeBox(\n        16.0, 5.0, 20.0, cq.Vector(-8.0, -8.0, -10.0)\n    )\n    rear_boss = rear_round.intersect(rear_flat_limit)\n\n    part = cq.Workplane(obj=flange).union(cq.Workplane(obj=front_register))\n    part = part.union(cq.Workplane(obj=rear_boss))",
+          "mesh": "00039492/meshes/step-02.json"
+        },
+        {
+          "index": 2,
+          "label": "Drill the central through bore",
+          "operation": "cut",
+          "lineStart": 33,
+          "lineEnd": 36,
+          "frame": "00039492/frames/step-03.png",
+          "durationMs": 1185,
+          "code": "    # Central through bore and its rear rounded-square counterbore.  The\n    # latter is the exact intersection of a radius-6.85 disk and a 12.3 mm\n    # square, extruded for the rear 3 mm.\n    part = part.cut(cq.Workplane(obj=_axial_cylinder(4.0, -5.0, 13.0)))",
+          "mesh": "00039492/meshes/step-03.json"
+        },
+        {
+          "index": 3,
+          "label": "Cut the rounded-square counterbore",
+          "operation": "cut",
+          "lineStart": 37,
+          "lineEnd": 42,
+          "frame": "00039492/frames/step-04.png",
+          "durationMs": 1185,
+          "code": "    counterbore_round = _axial_cylinder(6.85, -8.0, 3.0)\n    counterbore_flats = cq.Solid.makeBox(\n        12.3, 3.0, 12.3, cq.Vector(-6.15, -8.0, -6.15)\n    )\n    counterbore = counterbore_round.intersect(counterbore_flats)\n    part = part.cut(cq.Workplane(obj=counterbore))",
+          "mesh": "00039492/meshes/step-04.json"
+        },
+        {
+          "index": 4,
+          "label": "Machine the first stepped mounting hole",
+          "operation": "cut",
+          "lineStart": 44,
+          "lineEnd": 51,
+          "frame": "00039492/frames/step-05.png",
+          "durationMs": 1185,
+          "code": "    # Opposed stepped mounting holes.\n    for z in (-11.0, 11.0):\n        part = part.cut(\n            cq.Workplane(obj=_axial_cylinder(4.0, -8.0, 9.4, z=z))\n        )\n        part = part.cut(\n            cq.Workplane(obj=_axial_cylinder(2.25, 1.4, 6.6, z=z))\n        )",
+          "mesh": "00039492/meshes/step-05.json"
+        },
+        {
+          "index": 5,
+          "label": "Complete the stepped mounting holes",
+          "operation": "cut",
+          "lineStart": 44,
+          "lineEnd": 51,
+          "frame": "00039492/frames/step-06.png",
+          "durationMs": 1185,
+          "code": "    # Opposed stepped mounting holes.\n    for z in (-11.0, 11.0):\n        part = part.cut(\n            cq.Workplane(obj=_axial_cylinder(4.0, -8.0, 9.4, z=z))\n        )\n        part = part.cut(\n            cq.Workplane(obj=_axial_cylinder(2.25, 1.4, 6.6, z=z))\n        )",
+          "mesh": "00039492/meshes/step-06.json"
+        },
+        {
+          "index": 6,
+          "label": "Cut the diagonal capsule slot",
+          "operation": "cut",
+          "lineStart": 53,
+          "lineEnd": 65,
+          "frame": "00039492/frames/step-07.png",
+          "durationMs": 1185,
+          "code": "    # A radial capsule slot: 3 mm wide, 4 mm overall, directed at 45 degrees.\n    xz_plane = cq.Plane(\n        origin=(0.0, -3.0, 0.0),\n        xDir=(1.0, 0.0, 0.0),\n        normal=(0.0, -1.0, 0.0),\n    )\n    diagonal_slot = (\n        cq.Workplane(xz_plane)\n        .center(12.0 / (2.0 ** 0.5), 12.0 / (2.0 ** 0.5))\n        .slot2D(4.0, 3.0, 45.0)\n        .extrude(-11.0)\n    )\n    part = part.cut(diagonal_slot)",
+          "mesh": "00039492/meshes/step-07.json"
+        },
+        {
+          "index": 7,
+          "label": "Add the cross-drilled lubrication hole",
+          "operation": "cut",
+          "lineStart": 67,
+          "lineEnd": 74,
+          "frame": "00039492/frames/step-08.png",
+          "durationMs": 1185,
+          "code": "    # Cross-drilled lubrication hole through both walls of the rear boss.\n    cross_hole = cq.Solid.makeCylinder(\n        0.8,\n        18.0,\n        cq.Vector(-9.0, -6.5, 0.0),\n        cq.Vector(1.0, 0.0, 0.0),\n    )\n    part = part.cut(cq.Workplane(obj=cross_hole))",
+          "mesh": "00039492/meshes/step-08.json"
+        }
+      ],
+      "validation": {
+        "valid": true,
+        "solidCount": 1,
+        "volume": 8827.367989,
+        "boundingBox": {
+          "min": [
+            -17.25,
+            -8.007139,
+            -17.26737
+          ],
+          "max": [
+            17.25,
+            8.015104,
+            17.26737
+          ],
+          "size": [
+            34.5,
+            16.022244,
+            34.534739
+          ]
+        },
+        "lastStageSymmetricDifferenceVolume": 0,
+        "lastStageMatchesFinal": true
+      },
+      "remotion": {
+        "animation": "00039492/animation.mp4",
+        "fps": 60,
+        "durationMs": 10567,
+        "finalHoldMs": 1100
+      },
+      "modelColor": "#B27E90",
+      "colorReference": "零件素材/PNG/白色背景/00039492.png"
+    },
+    {
+      "id": "00039523",
+      "title": "Corrugated Sheet Panel",
+      "drawing": "00039523/drawing.png",
+      "drawingSize": [
+        1485,
+        2100
+      ],
+      "animation": "00039523/animation.webp",
+      "animationInfo": {
+        "path": "animation.webp",
+        "frameCount": 21,
+        "size": [
+          960,
+          720
+        ]
+      },
+      "frames": [
+        "00039523/frames/step-01.png",
+        "00039523/frames/step-02.png",
+        "00039523/frames/step-03.png",
+        "00039523/frames/step-04.png",
+        "00039523/frames/step-05.png",
+        "00039523/frames/step-06.png"
+      ],
+      "sourcePath": "零件素材/step/00039523.py",
+      "sourceCode": "\"\"\"Parametric CadQuery reconstruction of part 00039523.\n\nThe part is a 100 mm wide corrugated sheet.  Its 30 degree folds use a\n10 mm horizontal pitch and a 17.320508 mm rise.  The material is defined\nby the exact closed XZ section and is therefore still easy to edit.\n\"\"\"\n\nfrom pathlib import Path\n\nimport cadquery as cq\n\n\ndef build_part() -> cq.Workplane:\n    \"\"\"Build the editable corrugated sheet in the source STEP coordinates.\"\"\"\n    rise = 10.0 * (3.0 ** 0.5)\n\n    # Outer (upper) zig-zag, from the left valley to the right valley.\n    upper = [(10.0 * i, rise if i % 2 else 0.0) for i in range(19)]\n\n    # The lower boundary is the 1 mm normal offset of the folded surface.\n    # At each internal fold the two offsets meet at a 2 mm vertical offset.\n    lower = [(180.0 - 3.0 ** 0.5 / 2.0, -0.5)]\n    lower.extend(\n        (10.0 * i, (rise - 2.0) if i % 2 else -2.0)\n        for i in range(17, 0, -1)\n    )\n    lower.append((3.0 ** 0.5 / 2.0, -0.5))\n\n    xz_plane = cq.Plane(\n        origin=(0.0, 0.0, 0.0),\n        xDir=(1.0, 0.0, 0.0),\n        normal=(0.0, -1.0, 0.0),\n    )\n    part = cq.Workplane(xz_plane).polyline(upper + lower).close().extrude(-100.0)\n\n    # Six normal drilled holes: three on each end slope.  Overshooting the\n    # one-millimetre sheet thickness makes the Boolean cut unambiguous.\n    hole_radius = 2.25\n    left_top = cq.Vector(3.0, 0.0, 3.0 * (3.0 ** 0.5))\n    left_inward = cq.Vector(3.0 ** 0.5 / 2.0, 0.0, -0.5)\n    right_top = cq.Vector(177.0, 0.0, 3.0 * (3.0 ** 0.5))\n    right_inward = cq.Vector(-3.0 ** 0.5 / 2.0, 0.0, -0.5)\n\n    for y in (10.0, 50.0, 90.0):\n        start = left_top + cq.Vector(0.0, y, 0.0) - left_inward\n        cutter = cq.Solid.makeCylinder(hole_radius, 3.0, start, left_inward)\n        part = part.cut(cq.Workplane(obj=cutter))\n\n    for y in (10.0, 60.0, 90.0):\n        start = right_top + cq.Vector(0.0, y, 0.0) - right_inward\n        cutter = cq.Solid.makeCylinder(hole_radius, 3.0, start, right_inward)\n        part = part.cut(cq.Workplane(obj=cutter))\n\n    return part\n\n\nresult = build_part()\n\n\nif __name__ == \"__main__\":\n    output = Path(__file__).with_name(f\"{Path(__file__).stem}_reconstructed.step\")\n    cq.exporters.export(result, str(output))\n    print(f\"Exported {output}\")\n",
+      "language": "python",
+      "steps": [
+        {
+          "index": 0,
+          "label": "Extrude the corrugated sheet profile",
+          "operation": "base",
+          "lineStart": 15,
+          "lineEnd": 34,
+          "frame": "00039523/frames/step-01.png",
+          "durationMs": 1185,
+          "code": "    rise = 10.0 * (3.0 ** 0.5)\n\n    # Outer (upper) zig-zag, from the left valley to the right valley.\n    upper = [(10.0 * i, rise if i % 2 else 0.0) for i in range(19)]\n\n    # The lower boundary is the 1 mm normal offset of the folded surface.\n    # At each internal fold the two offsets meet at a 2 mm vertical offset.\n    lower = [(180.0 - 3.0 ** 0.5 / 2.0, -0.5)]\n    lower.extend(\n        (10.0 * i, (rise - 2.0) if i % 2 else -2.0)\n        for i in range(17, 0, -1)\n    )\n    lower.append((3.0 ** 0.5 / 2.0, -0.5))\n\n    xz_plane = cq.Plane(\n        origin=(0.0, 0.0, 0.0),\n        xDir=(1.0, 0.0, 0.0),\n        normal=(0.0, -1.0, 0.0),\n    )\n    part = cq.Workplane(xz_plane).polyline(upper + lower).close().extrude(-100.0)",
+          "mesh": "00039523/meshes/step-01.json"
+        },
+        {
+          "index": 1,
+          "label": "Drill left hole 1 of 3",
+          "operation": "cut",
+          "lineStart": 36,
+          "lineEnd": 47,
+          "frame": "00039523/frames/step-02.png",
+          "durationMs": 1185,
+          "code": "    # Six normal drilled holes: three on each end slope.  Overshooting the\n    # one-millimetre sheet thickness makes the Boolean cut unambiguous.\n    hole_radius = 2.25\n    left_top = cq.Vector(3.0, 0.0, 3.0 * (3.0 ** 0.5))\n    left_inward = cq.Vector(3.0 ** 0.5 / 2.0, 0.0, -0.5)\n    right_top = cq.Vector(177.0, 0.0, 3.0 * (3.0 ** 0.5))\n    right_inward = cq.Vector(-3.0 ** 0.5 / 2.0, 0.0, -0.5)\n\n    for y in (10.0, 50.0, 90.0):\n        start = left_top + cq.Vector(0.0, y, 0.0) - left_inward\n        cutter = cq.Solid.makeCylinder(hole_radius, 3.0, start, left_inward)\n        part = part.cut(cq.Workplane(obj=cutter))",
+          "mesh": "00039523/meshes/step-02.json"
+        },
+        {
+          "index": 2,
+          "label": "Complete the left hole row",
+          "operation": "cut",
+          "lineStart": 36,
+          "lineEnd": 47,
+          "frame": "00039523/frames/step-03.png",
+          "durationMs": 1185,
+          "code": "    # Six normal drilled holes: three on each end slope.  Overshooting the\n    # one-millimetre sheet thickness makes the Boolean cut unambiguous.\n    hole_radius = 2.25\n    left_top = cq.Vector(3.0, 0.0, 3.0 * (3.0 ** 0.5))\n    left_inward = cq.Vector(3.0 ** 0.5 / 2.0, 0.0, -0.5)\n    right_top = cq.Vector(177.0, 0.0, 3.0 * (3.0 ** 0.5))\n    right_inward = cq.Vector(-3.0 ** 0.5 / 2.0, 0.0, -0.5)\n\n    for y in (10.0, 50.0, 90.0):\n        start = left_top + cq.Vector(0.0, y, 0.0) - left_inward\n        cutter = cq.Solid.makeCylinder(hole_radius, 3.0, start, left_inward)\n        part = part.cut(cq.Workplane(obj=cutter))",
+          "mesh": "00039523/meshes/step-03.json"
+        },
+        {
+          "index": 3,
+          "label": "Drill right hole 1 of 3",
+          "operation": "cut",
+          "lineStart": 49,
+          "lineEnd": 52,
+          "frame": "00039523/frames/step-04.png",
+          "durationMs": 1185,
+          "code": "    for y in (10.0, 60.0, 90.0):\n        start = right_top + cq.Vector(0.0, y, 0.0) - right_inward\n        cutter = cq.Solid.makeCylinder(hole_radius, 3.0, start, right_inward)\n        part = part.cut(cq.Workplane(obj=cutter))",
+          "mesh": "00039523/meshes/step-04.json"
+        },
+        {
+          "index": 4,
+          "label": "Drill right hole 2 of 3",
+          "operation": "cut",
+          "lineStart": 49,
+          "lineEnd": 52,
+          "frame": "00039523/frames/step-05.png",
+          "durationMs": 1185,
+          "code": "    for y in (10.0, 60.0, 90.0):\n        start = right_top + cq.Vector(0.0, y, 0.0) - right_inward\n        cutter = cq.Solid.makeCylinder(hole_radius, 3.0, start, right_inward)\n        part = part.cut(cq.Workplane(obj=cutter))",
+          "mesh": "00039523/meshes/step-05.json"
+        },
+        {
+          "index": 5,
+          "label": "Complete the right hole row",
+          "operation": "cut",
+          "lineStart": 49,
+          "lineEnd": 52,
+          "frame": "00039523/frames/step-06.png",
+          "durationMs": 1185,
+          "code": "    for y in (10.0, 60.0, 90.0):\n        start = right_top + cq.Vector(0.0, y, 0.0) - right_inward\n        cutter = cq.Solid.makeCylinder(hole_radius, 3.0, start, right_inward)\n        part = part.cut(cq.Workplane(obj=cutter))",
+          "mesh": "00039523/meshes/step-06.json"
+        }
+      ],
+      "validation": {
+        "valid": true,
+        "solidCount": 1,
+        "volume": 35731.369042,
+        "boundingBox": {
+          "min": [
+            0,
+            0,
+            -2
+          ],
+          "max": [
+            180,
+            100,
+            17.320508
+          ],
+          "size": [
+            180,
+            100,
+            19.320508
+          ]
+        },
+        "lastStageSymmetricDifferenceVolume": 0,
+        "lastStageMatchesFinal": true
+      },
+      "remotion": {
+        "animation": "00039523/animation.mp4",
+        "fps": 60,
+        "durationMs": 8200,
+        "finalHoldMs": 1100
+      },
+      "modelColor": "#96AE74",
+      "colorReference": "零件素材/PNG/白色背景/00039523.png"
+    },
+    {
+      "id": "00039948",
+      "title": "Folded Channel Bracket",
+      "drawing": "00039948/drawing.png",
+      "drawingSize": [
+        1485,
+        2100
+      ],
+      "animation": "00039948/animation.webp",
+      "animationInfo": {
+        "path": "animation.webp",
+        "frameCount": 17,
+        "size": [
+          960,
+          720
+        ]
+      },
+      "frames": [
+        "00039948/frames/step-01.png",
+        "00039948/frames/step-02.png",
+        "00039948/frames/step-03.png",
+        "00039948/frames/step-04.png",
+        "00039948/frames/step-05.png"
+      ],
+      "sourcePath": "零件素材/step/00039948.py",
+      "sourceCode": "\"\"\"Parametric CadQuery reconstruction of 00039948.step.\"\"\"\n\nfrom pathlib import Path\n\nimport cadquery as cq\n\n\nSQRT2 = 2.0 ** 0.5\n\n\ndef _y_cylinder(x: float, y: float, z: float, radius: float, depth: float = 4.0) -> cq.Workplane:\n    return (\n        cq.Workplane(\"XZ\", origin=(x, y, z))\n        .circle(radius)\n        .extrude(depth / 2.0, both=True)\n    )\n\n\ndef _end_corner_relief(x_side: int, z_side: int) -> cq.Workplane:\n    \"\"\"Cutter for one radius-2 outer corner of an end flange.\"\"\"\n    r = 2.0\n    xc = 32.0 * x_side\n    zc = 13.0 * z_side\n    xo = 34.0 * x_side\n    zo = 15.0 * z_side\n    d = r / SQRT2\n\n    if x_side > 0 and z_side > 0:\n        pts, mid, end = [(32.0, 15.0), (34.0, 15.0), (34.0, 13.0)], (32.0 + d, 13.0 + d), (32.0, 15.0)\n    elif x_side > 0 and z_side < 0:\n        pts, mid, end = [(32.0, -15.0), (34.0, -15.0), (34.0, -13.0)], (32.0 + d, -13.0 - d), (32.0, -15.0)\n    elif x_side < 0 and z_side > 0:\n        pts, mid, end = [(-34.0, 15.0), (-34.0, 13.0)], (-32.0 - d, 13.0 + d), (-32.0, 15.0)\n    else:\n        pts, mid, end = [(-34.0, -15.0), (-34.0, -13.0)], (-32.0 - d, -13.0 - d), (-32.0, -15.0)\n\n    wire = cq.Workplane(\"XZ\", origin=(0.0, 24.5, 0.0)).moveTo(*pts[0])\n    for p in pts[1:]:\n        wire = wire.lineTo(*p)\n    return wire.threePointArc(mid, end).close().extrude(2.0, both=True)\n\n\ndef _central_notch() -> cq.Workplane:\n    \"\"\"Open U-notch: R8 bowl, 12 mm neck, and R2 mouth corners.\"\"\"\n    z_join = (8.0 ** 2 - 6.0 ** 2) ** 0.5\n    d = 2.0 / SQRT2\n    return (\n        cq.Workplane(\"XZ\", origin=(0.0, 1.0, 0.0))\n        .moveTo(-8.0, 17.0)\n        .lineTo(8.0, 17.0)\n        .lineTo(8.0, 15.0)\n        .threePointArc((8.0 - d, 13.0 + d), (6.0, 13.0))\n        .lineTo(6.0, z_join)\n        .threePointArc((0.0, -8.0), (-6.0, z_join))\n        .lineTo(-6.0, 13.0)\n        .threePointArc((-8.0 + d, 13.0 + d), (-8.0, 15.0))\n        .close()\n        .extrude(2.0, both=True)\n    )\n\n\ndef build_part() -> cq.Workplane:\n    r = 2.0\n    d = r / SQRT2\n\n    # XY section of the folded channel.  Each bend is retained as an editable arc.\n    part = (\n        cq.Workplane(\"XY\")\n        .moveTo(-20.0, 0.0)\n        .lineTo(20.0, 0.0)\n        .threePointArc((20.0 + d, 2.0 - d), (22.0, 2.0))\n        .lineTo(22.0, 21.5)\n        .threePointArc((24.0 - d, 21.5 + d), (24.0, 23.5))\n        .lineTo(34.0, 23.5)\n        .lineTo(34.0, 25.5)\n        .lineTo(22.0, 25.5)\n        .threePointArc((22.0 - d, 23.5 + d), (20.0, 23.5))\n        .lineTo(20.0, 4.0)\n        .threePointArc((18.0 + d, 4.0 - d), (18.0, 2.0))\n        .lineTo(-18.0, 2.0)\n        .threePointArc((-18.0 - d, 4.0 - d), (-20.0, 4.0))\n        .lineTo(-20.0, 23.5)\n        .threePointArc((-22.0 + d, 23.5 + d), (-22.0, 25.5))\n        .lineTo(-34.0, 25.5)\n        .lineTo(-34.0, 23.5)\n        .lineTo(-24.0, 23.5)\n        .threePointArc((-24.0 + d, 21.5 + d), (-22.0, 21.5))\n        .lineTo(-22.0, 2.0)\n        .threePointArc((-20.0 - d, 2.0 - d), (-20.0, 0.0))\n        .close()\n        .extrude(15.0, both=True)\n    )\n\n    # Round only the four remote flange corners in the XZ view.\n    for xs in (-1, 1):\n        for zs in (-1, 1):\n            part = part.cut(_end_corner_relief(xs, zs))\n\n    part = part.cut(_central_notch())\n\n    # Four mounting holes in the central web.\n    for x in (-10.0, 10.0):\n        for z in (-10.0, 10.0):\n            part = part.cut(_y_cylinder(x, 1.0, z, 1.7))\n\n    # One hole in each end flange.\n    for x in (-27.0, 27.0):\n        part = part.cut(_y_cylinder(x, 24.5, 0.0, 1.25))\n\n    return part\n\n\nresult = build_part()\n\n\nif __name__ == \"__main__\":\n    output = Path(__file__).with_name(f\"{Path(__file__).stem}_reconstructed.step\")\n    cq.exporters.export(result, str(output))\n    print(f\"Exported {output}\")\n",
+      "language": "python",
+      "steps": [
+        {
+          "index": 0,
+          "label": "Extrude the folded channel",
+          "operation": "base",
+          "lineStart": 62,
+          "lineEnd": 92,
+          "frame": "00039948/frames/step-01.png",
+          "durationMs": 1185,
+          "code": "def build_part() -> cq.Workplane:\n    r = 2.0\n    d = r / SQRT2\n\n    # XY section of the folded channel.  Each bend is retained as an editable arc.\n    part = (\n        cq.Workplane(\"XY\")\n        .moveTo(-20.0, 0.0)\n        .lineTo(20.0, 0.0)\n        .threePointArc((20.0 + d, 2.0 - d), (22.0, 2.0))\n        .lineTo(22.0, 21.5)\n        .threePointArc((24.0 - d, 21.5 + d), (24.0, 23.5))\n        .lineTo(34.0, 23.5)\n        .lineTo(34.0, 25.5)\n        .lineTo(22.0, 25.5)\n        .threePointArc((22.0 - d, 23.5 + d), (20.0, 23.5))\n        .lineTo(20.0, 4.0)\n        .threePointArc((18.0 + d, 4.0 - d), (18.0, 2.0))\n        .lineTo(-18.0, 2.0)\n        .threePointArc((-18.0 - d, 4.0 - d), (-20.0, 4.0))\n        .lineTo(-20.0, 23.5)\n        .threePointArc((-22.0 + d, 23.5 + d), (-22.0, 25.5))\n        .lineTo(-34.0, 25.5)\n        .lineTo(-34.0, 23.5)\n        .lineTo(-24.0, 23.5)\n        .threePointArc((-24.0 + d, 21.5 + d), (-22.0, 21.5))\n        .lineTo(-22.0, 2.0)\n        .threePointArc((-20.0 - d, 2.0 - d), (-20.0, 0.0))\n        .close()\n        .extrude(15.0, both=True)\n    )",
+          "mesh": "00039948/meshes/step-01.json"
+        },
+        {
+          "index": 1,
+          "label": "Round the four flange corners",
+          "operation": "cut",
+          "lineStart": 94,
+          "lineEnd": 97,
+          "frame": "00039948/frames/step-02.png",
+          "durationMs": 1185,
+          "code": "    # Round only the four remote flange corners in the XZ view.\n    for xs in (-1, 1):\n        for zs in (-1, 1):\n            part = part.cut(_end_corner_relief(xs, zs))",
+          "mesh": "00039948/meshes/step-02.json"
+        },
+        {
+          "index": 2,
+          "label": "Open the central U-notch",
+          "operation": "cut",
+          "lineStart": 99,
+          "lineEnd": 99,
+          "frame": "00039948/frames/step-03.png",
+          "durationMs": 1185,
+          "code": "    part = part.cut(_central_notch())",
+          "mesh": "00039948/meshes/step-03.json"
+        },
+        {
+          "index": 3,
+          "label": "Drill the central mounting pattern",
+          "operation": "cut",
+          "lineStart": 101,
+          "lineEnd": 104,
+          "frame": "00039948/frames/step-04.png",
+          "durationMs": 1185,
+          "code": "    # Four mounting holes in the central web.\n    for x in (-10.0, 10.0):\n        for z in (-10.0, 10.0):\n            part = part.cut(_y_cylinder(x, 1.0, z, 1.7))",
+          "mesh": "00039948/meshes/step-04.json"
+        },
+        {
+          "index": 4,
+          "label": "Drill the two end-flange holes",
+          "operation": "cut",
+          "lineStart": 106,
+          "lineEnd": 108,
+          "frame": "00039948/frames/step-05.png",
+          "durationMs": 1185,
+          "code": "    # One hole in each end flange.\n    for x in (-27.0, 27.0):\n        part = part.cut(_y_cylinder(x, 24.5, 0.0, 1.25))",
+          "mesh": "00039948/meshes/step-05.json"
+        }
+      ],
+      "validation": {
+        "valid": true,
+        "solidCount": 1,
+        "volume": 6207.356654,
+        "boundingBox": {
+          "min": [
+            -34.001904,
+            -0.008088,
+            -15.001904
+          ],
+          "max": [
+            34.001904,
+            25.501904,
+            15.001904
+          ],
+          "size": [
+            68.003807,
+            25.509992,
+            30.003807
+          ]
+        },
+        "lastStageSymmetricDifferenceVolume": 0,
+        "lastStageMatchesFinal": true
+      },
+      "remotion": {
+        "animation": "00039948/animation.mp4",
+        "fps": 60,
+        "durationMs": 7017,
+        "finalHoldMs": 1100
+      },
+      "modelColor": "#8790BE",
+      "colorReference": "零件素材/PNG/白色背景/00039948.png"
+    },
+    {
+      "id": "00047744",
+      "title": "Chamfered Angle Rail",
+      "drawing": "00047744/drawing.png",
+      "drawingSize": [
+        1485,
+        2100
+      ],
+      "animation": "00047744/animation.webp",
+      "animationInfo": {
+        "path": "animation.webp",
+        "frameCount": 21,
+        "size": [
+          960,
+          720
+        ]
+      },
+      "frames": [
+        "00047744/frames/step-01.png",
+        "00047744/frames/step-02.png",
+        "00047744/frames/step-03.png",
+        "00047744/frames/step-04.png",
+        "00047744/frames/step-05.png",
+        "00047744/frames/step-06.png"
+      ],
+      "sourcePath": "零件素材/step/00047744.py",
+      "sourceCode": "\"\"\"Parametric CadQuery reconstruction of 00047744.step.\"\"\"\n\nfrom pathlib import Path\n\nimport cadquery as cq\n\n\n# The source part is translated far from the global origin; these values retain\n# that assembly coordinate system intentionally.\nX_BACK = 219.5044049139\nX_RECESS = 220.5044049139\nX_FRONT = 225.5041443591\nX_END = 245.0044049139\nY_MIN = 51.44755721991\nY_MAX = 63.44755721991\nZ_BOTTOM = -20.33981900675\nZ_BASE_TOP = -15.83983708675\nZ_TOP = -0.83983708675\n\n\ndef _edge_near(shape: cq.Workplane, x: float, z: float) -> list[cq.Edge]:\n    matches = []\n    for edge in shape.val().Edges():\n        bb = edge.BoundingBox()\n        c = edge.Center()\n        if bb.ylen > 11.9 and abs(c.x - x) < 0.01 and abs(c.z - z) < 0.01:\n            matches.append(edge)\n    return matches\n\n\ndef _slot_z() -> cq.Workplane:\n    \"\"\"R1.7 slot, 12 mm between arc centers, cut along global Z.\"\"\"\n    x1, x2 = 228.5042729037, 240.5042729037\n    y = 57.44755721991\n    radius = 1.7\n    depth = 6.0\n    bridge = (\n        cq.Workplane(\"XY\", origin=((x1 + x2) / 2.0, y, Z_BOTTOM - 0.5))\n        .rect(x2 - x1, 2.0 * radius)\n        .extrude(depth)\n    )\n    ends = []\n    for x in (x1, x2):\n        ends.append(\n            cq.Workplane(\"XY\", origin=(x, y, Z_BOTTOM - 0.5))\n            .circle(radius)\n            .extrude(depth)\n        )\n    return bridge.union(ends[0]).union(ends[1])\n\n\ndef _hole_x(z: float) -> cq.Workplane:\n    return (\n        cq.Workplane(\"YZ\", origin=(X_RECESS - 0.5, 57.44755721991, z))\n        .circle(1.25)\n        .extrude((X_FRONT - X_RECESS) + 1.0)\n    )\n\n\ndef build_part() -> cq.Workplane:\n    width = Y_MAX - Y_MIN\n\n    base = (\n        cq.Workplane(\"XY\", origin=(X_BACK, Y_MIN, Z_BOTTOM))\n        .box(X_END - X_BACK, width, Z_BASE_TOP - Z_BOTTOM, centered=(False, False, False))\n    )\n    upright = (\n        cq.Workplane(\"XY\", origin=(X_BACK, Y_MIN, Z_BOTTOM))\n        .box(X_FRONT - X_BACK, width, Z_TOP - Z_BOTTOM, centered=(False, False, False))\n    )\n    part = base.union(upright)\n\n    # Three convex longitudinal edges and five convex outline edges at each end\n    # carry a common 0.5 mm chamfer.  Selecting the complete edge set in one\n    # operation also creates the six small trihedral corner faces.\n    longitudinal = []\n    longitudinal += _edge_near(part, X_BACK, Z_TOP)\n    longitudinal += _edge_near(part, X_FRONT, Z_TOP)\n    longitudinal += _edge_near(part, X_END, Z_BASE_TOP)\n\n    end_edges = []\n    for edge in part.val().Edges():\n        bb = edge.BoundingBox()\n        c = edge.Center()\n        cy = c.y\n        at_end = abs(cy - Y_MIN) < 1.0e-5 or abs(cy - Y_MAX) < 1.0e-5\n        is_main_edge = edge.Length() > 1.0 and abs(c.z - Z_BOTTOM) > 0.01\n        if bb.ylen < 1.0e-6 and at_end and is_main_edge:\n            end_edges.append(edge)\n    part = part.newObject(longitudinal + end_edges).chamfer(0.5)\n\n    # A central 1 mm-deep relief leaves two 1.5 mm-wide rear rails.\n    relief = (\n        cq.Workplane(\"XY\", origin=(X_BACK - 0.1, Y_MIN + 2.0, Z_BOTTOM - 0.1))\n        .box(1.1, 8.0, (Z_TOP - Z_BOTTOM) + 0.2, centered=(False, False, False))\n    )\n    part = part.cut(relief)\n\n    # Two through-holes in the upright and one capsule slot through the base.\n    for z in (-13.33981770479, -7.339817704786):\n        part = part.cut(_hole_x(z))\n    part = part.cut(_slot_z())\n\n    return part\n\n\nresult = build_part()\n\n\nif __name__ == \"__main__\":\n    output = Path(__file__).with_name(f\"{Path(__file__).stem}_reconstructed.step\")\n    cq.exporters.export(result, str(output))\n    print(f\"Exported {output}\")\n",
+      "language": "python",
+      "steps": [
+        {
+          "index": 0,
+          "label": "Join the base and upright",
+          "operation": "base",
+          "lineStart": 60,
+          "lineEnd": 71,
+          "frame": "00047744/frames/step-01.png",
+          "durationMs": 1185,
+          "code": "def build_part() -> cq.Workplane:\n    width = Y_MAX - Y_MIN\n\n    base = (\n        cq.Workplane(\"XY\", origin=(X_BACK, Y_MIN, Z_BOTTOM))\n        .box(X_END - X_BACK, width, Z_BASE_TOP - Z_BOTTOM, centered=(False, False, False))\n    )\n    upright = (\n        cq.Workplane(\"XY\", origin=(X_BACK, Y_MIN, Z_BOTTOM))\n        .box(X_FRONT - X_BACK, width, Z_TOP - Z_BOTTOM, centered=(False, False, False))\n    )\n    part = base.union(upright)",
+          "mesh": "00047744/meshes/step-01.json"
+        },
+        {
+          "index": 1,
+          "label": "Chamfer the exposed edges",
+          "operation": "chamfer",
+          "lineStart": 73,
+          "lineEnd": 90,
+          "frame": "00047744/frames/step-02.png",
+          "durationMs": 1185,
+          "code": "    # Three convex longitudinal edges and five convex outline edges at each end\n    # carry a common 0.5 mm chamfer.  Selecting the complete edge set in one\n    # operation also creates the six small trihedral corner faces.\n    longitudinal = []\n    longitudinal += _edge_near(part, X_BACK, Z_TOP)\n    longitudinal += _edge_near(part, X_FRONT, Z_TOP)\n    longitudinal += _edge_near(part, X_END, Z_BASE_TOP)\n\n    end_edges = []\n    for edge in part.val().Edges():\n        bb = edge.BoundingBox()\n        c = edge.Center()\n        cy = c.y\n        at_end = abs(cy - Y_MIN) < 1.0e-5 or abs(cy - Y_MAX) < 1.0e-5\n        is_main_edge = edge.Length() > 1.0 and abs(c.z - Z_BOTTOM) > 0.01\n        if bb.ylen < 1.0e-6 and at_end and is_main_edge:\n            end_edges.append(edge)\n    part = part.newObject(longitudinal + end_edges).chamfer(0.5)",
+          "mesh": "00047744/meshes/step-02.json"
+        },
+        {
+          "index": 2,
+          "label": "Cut the rear rail relief",
+          "operation": "cut",
+          "lineStart": 92,
+          "lineEnd": 97,
+          "frame": "00047744/frames/step-03.png",
+          "durationMs": 1185,
+          "code": "    # A central 1 mm-deep relief leaves two 1.5 mm-wide rear rails.\n    relief = (\n        cq.Workplane(\"XY\", origin=(X_BACK - 0.1, Y_MIN + 2.0, Z_BOTTOM - 0.1))\n        .box(1.1, 8.0, (Z_TOP - Z_BOTTOM) + 0.2, centered=(False, False, False))\n    )\n    part = part.cut(relief)",
+          "mesh": "00047744/meshes/step-03.json"
+        },
+        {
+          "index": 3,
+          "label": "Drill the first upright hole",
+          "operation": "cut",
+          "lineStart": 99,
+          "lineEnd": 101,
+          "frame": "00047744/frames/step-04.png",
+          "durationMs": 1185,
+          "code": "    # Two through-holes in the upright and one capsule slot through the base.\n    for z in (-13.33981770479, -7.339817704786):\n        part = part.cut(_hole_x(z))",
+          "mesh": "00047744/meshes/step-04.json"
+        },
+        {
+          "index": 4,
+          "label": "Drill the second upright hole",
+          "operation": "cut",
+          "lineStart": 99,
+          "lineEnd": 101,
+          "frame": "00047744/frames/step-05.png",
+          "durationMs": 1185,
+          "code": "    # Two through-holes in the upright and one capsule slot through the base.\n    for z in (-13.33981770479, -7.339817704786):\n        part = part.cut(_hole_x(z))",
+          "mesh": "00047744/meshes/step-05.json"
+        },
+        {
+          "index": 5,
+          "label": "Cut the capsule slot in the base",
+          "operation": "cut",
+          "lineStart": 102,
+          "lineEnd": 102,
+          "frame": "00047744/frames/step-06.png",
+          "durationMs": 1185,
+          "code": "    part = part.cut(_slot_z())",
+          "mesh": "00047744/meshes/step-06.json"
+        }
+      ],
+      "validation": {
+        "valid": true,
+        "solidCount": 1,
+        "volume": 2008.19905,
+        "boundingBox": {
+          "min": [
+            219.504405,
+            51.447557,
+            -20.341531
+          ],
+          "max": [
+            245.004405,
+            63.447557,
+            -0.839837
+          ],
+          "size": [
+            25.5,
+            12,
+            19.501694
+          ]
+        },
+        "lastStageSymmetricDifferenceVolume": 0,
+        "lastStageMatchesFinal": true
+      },
+      "remotion": {
+        "animation": "00047744/animation.mp4",
+        "fps": 60,
+        "durationMs": 8200,
+        "finalHoldMs": 1100
+      },
+      "modelColor": "#A7716C",
+      "colorReference": "零件素材/PNG/白色背景/00047744.png"
+    },
+    {
+      "id": "00049189",
+      "title": "Mounting Duct",
+      "drawing": "00049189/drawing.png",
+      "drawingSize": [
+        1485,
+        2100
+      ],
+      "animation": "00049189/animation.webp",
+      "animationInfo": {
+        "path": "animation.webp",
+        "frameCount": 21,
+        "size": [
+          960,
+          720
+        ]
+      },
+      "frames": [
+        "00049189/frames/step-01.png",
+        "00049189/frames/step-02.png",
+        "00049189/frames/step-03.png",
+        "00049189/frames/step-04.png",
+        "00049189/frames/step-05.png",
+        "00049189/frames/step-06.png"
+      ],
+      "sourcePath": "零件素材/step/00049189.py",
+      "sourceCode": "\"\"\"Parametric CadQuery reconstruction of 00049189.step.\n\nThis is a 2.3 mm-wall mounting duct with a chamfered front flange, an open\ninternal passage, a side inspection window, and transverse mounting holes.\nDimensions are in millimetres.\n\"\"\"\n\nfrom math import cos, radians, sin\nfrom pathlib import Path\n\nimport cadquery as cq\n\n\nCOS_30 = cos(radians(30.0))\nSIN_30 = sin(radians(30.0))\n\n\ndef _cylinder(\n    radius: float,\n    length: float,\n    origin: tuple[float, float, float],\n    direction: tuple[float, float, float],\n) -> cq.Workplane:\n    \"\"\"Create a cylindrical cutting tool along a global axis.\"\"\"\n\n    return cq.Workplane(cq.Plane(origin=origin, normal=direction)).circle(radius).extrude(length)\n\n\ndef _xy_prism(points: list[tuple[float, float]], z0: float, height: float) -> cq.Workplane:\n    \"\"\"Extrude a closed XY polygon along +Z.\"\"\"\n\n    return cq.Workplane(\"XY\", origin=(0.0, 0.0, z0)).polyline(points).close().extrude(height)\n\n\ndef build_part() -> cq.Workplane:\n    \"\"\"Build the editable CAD model in the source STEP coordinate system.\"\"\"\n\n    # Outer planform of the 50 mm-deep duct.\n    outer = [\n        (0.0, 0.0),\n        (39.0, 0.0),\n        (39.0, 10.328638963225458),\n        (73.26056233274299, 30.10898384862281),\n        (53.26056233274282, 64.75),\n        (0.0, 34.0),\n    ]\n    duct = _xy_prism(outer, 0.0, 50.0)\n\n    # Front flange in the XZ plane, Y=[0,2.3].  Its four 3 mm corner\n    # chamfers are part of the original sketch rather than edge treatments.\n    flange_profile = [\n        (0.0, -12.0),\n        (3.0, -15.0),\n        (36.0, -15.0),\n        (39.0, -12.0),\n        (39.0, 62.0),\n        (36.0, 65.0),\n        (3.0, 65.0),\n        (0.0, 62.0),\n    ]\n    flange_plane = cq.Plane(\n        origin=(0.0, 0.0, 0.0),\n        xDir=(1.0, 0.0, 0.0),\n        normal=(0.0, -1.0, 0.0),\n    )\n    flange = cq.Workplane(flange_plane).polyline(flange_profile).close().extrude(-2.3)\n    part = duct.union(flange)\n\n    # Passage boundary.  The first two points extend outside the open mouth;\n    # all remaining points are the exact 2.3 mm-offset inner wall vertices.\n    inner_passage = [\n        (2.3, -5.0),\n        (45.0, -5.0),\n        (39.0, 10.328638963225458),\n        (37.85, 12.320497391929658),\n        (70.11870390403877, 30.950842277327002),\n        (52.41870390403862, 61.608141571296045),\n        (2.3, 32.672094380863868),\n    ]\n    part = part.cut(_xy_prism(inner_passage, 2.3, 45.4))\n\n    # Rectangular inspection window through the lower-right sloping wall.\n    side_start = (39.0, 10.328638963225458)\n    side_end = (73.26056233274299, 30.10898384862281)\n    tangent = (COS_30, SIN_30)\n    inward = (-SIN_30, COS_30)\n    window_outer_end = (\n        side_end[0] - 2.3 * tangent[0],\n        side_end[1] - 2.3 * tangent[1],\n    )\n    window = [\n        side_start,\n        window_outer_end,\n        (\n            window_outer_end[0] + 2.3 * inward[0],\n            window_outer_end[1] + 2.3 * inward[1],\n        ),\n        (\n            side_start[0] + 2.3 * inward[0],\n            side_start[1] + 2.3 * inward[1],\n        ),\n    ]\n    part = part.cut(_xy_prism(window, 9.3, 31.4))\n\n    # Two holes through the front flange.\n    for z_pos in (-7.5, 57.5):\n        part = part.cut(_cylinder(3.0, 2.3, (12.0, 0.0, z_pos), (0.0, 1.0, 0.0)))\n\n    # Two holes through the lower-right wall.  Their centres lie 18.5 mm\n    # back from the outer corner along the 30-degree wall.\n    small_outer_center = (\n        side_end[0] - 18.5 * tangent[0],\n        side_end[1] - 18.5 * tangent[1],\n    )\n    for z_pos in (6.0, 44.0):\n        part = part.cut(\n            _cylinder(\n                1.65,\n                2.3,\n                (small_outer_center[0], small_outer_center[1], z_pos),\n                (-SIN_30, COS_30, 0.0),\n            )\n        )\n\n    # Large hole through the parallel upper-left wall, centred 35 mm from\n    # the left vertex along that wall.\n    large_outer_center = (35.0 * COS_30, 34.0 + 35.0 * SIN_30)\n    part = part.cut(\n        _cylinder(\n            9.75,\n            2.3,\n            (large_outer_center[0], large_outer_center[1], 25.0),\n            (SIN_30, -COS_30, 0.0),\n        )\n    )\n\n    return part\n\n\nresult = build_part()\n\n\nif __name__ == \"__main__\":\n    output_path = Path(__file__).with_name(f\"{Path(__file__).stem}_reconstructed.step\")\n    cq.exporters.export(result, str(output_path))\n    print(f\"Wrote {output_path}\")\n",
+      "language": "python",
+      "steps": [
+        {
+          "index": 0,
+          "label": "Join the duct shell and front flange",
+          "operation": "base",
+          "lineStart": 38,
+          "lineEnd": 67,
+          "frame": "00049189/frames/step-01.png",
+          "durationMs": 1185,
+          "code": "    # Outer planform of the 50 mm-deep duct.\n    outer = [\n        (0.0, 0.0),\n        (39.0, 0.0),\n        (39.0, 10.328638963225458),\n        (73.26056233274299, 30.10898384862281),\n        (53.26056233274282, 64.75),\n        (0.0, 34.0),\n    ]\n    duct = _xy_prism(outer, 0.0, 50.0)\n\n    # Front flange in the XZ plane, Y=[0,2.3].  Its four 3 mm corner\n    # chamfers are part of the original sketch rather than edge treatments.\n    flange_profile = [\n        (0.0, -12.0),\n        (3.0, -15.0),\n        (36.0, -15.0),\n        (39.0, -12.0),\n        (39.0, 62.0),\n        (36.0, 65.0),\n        (3.0, 65.0),\n        (0.0, 62.0),\n    ]\n    flange_plane = cq.Plane(\n        origin=(0.0, 0.0, 0.0),\n        xDir=(1.0, 0.0, 0.0),\n        normal=(0.0, -1.0, 0.0),\n    )\n    flange = cq.Workplane(flange_plane).polyline(flange_profile).close().extrude(-2.3)\n    part = duct.union(flange)",
+          "mesh": "00049189/meshes/step-01.json"
+        },
+        {
+          "index": 1,
+          "label": "Hollow the internal passage",
+          "operation": "cut",
+          "lineStart": 69,
+          "lineEnd": 80,
+          "frame": "00049189/frames/step-02.png",
+          "durationMs": 1185,
+          "code": "    # Passage boundary.  The first two points extend outside the open mouth;\n    # all remaining points are the exact 2.3 mm-offset inner wall vertices.\n    inner_passage = [\n        (2.3, -5.0),\n        (45.0, -5.0),\n        (39.0, 10.328638963225458),\n        (37.85, 12.320497391929658),\n        (70.11870390403877, 30.950842277327002),\n        (52.41870390403862, 61.608141571296045),\n        (2.3, 32.672094380863868),\n    ]\n    part = part.cut(_xy_prism(inner_passage, 2.3, 45.4))",
+          "mesh": "00049189/meshes/step-02.json"
+        },
+        {
+          "index": 2,
+          "label": "Open the side inspection window",
+          "operation": "cut",
+          "lineStart": 82,
+          "lineEnd": 103,
+          "frame": "00049189/frames/step-03.png",
+          "durationMs": 1185,
+          "code": "    # Rectangular inspection window through the lower-right sloping wall.\n    side_start = (39.0, 10.328638963225458)\n    side_end = (73.26056233274299, 30.10898384862281)\n    tangent = (COS_30, SIN_30)\n    inward = (-SIN_30, COS_30)\n    window_outer_end = (\n        side_end[0] - 2.3 * tangent[0],\n        side_end[1] - 2.3 * tangent[1],\n    )\n    window = [\n        side_start,\n        window_outer_end,\n        (\n            window_outer_end[0] + 2.3 * inward[0],\n            window_outer_end[1] + 2.3 * inward[1],\n        ),\n        (\n            side_start[0] + 2.3 * inward[0],\n            side_start[1] + 2.3 * inward[1],\n        ),\n    ]\n    part = part.cut(_xy_prism(window, 9.3, 31.4))",
+          "mesh": "00049189/meshes/step-03.json"
+        },
+        {
+          "index": 3,
+          "label": "Drill the front flange holes",
+          "operation": "cut",
+          "lineStart": 105,
+          "lineEnd": 107,
+          "frame": "00049189/frames/step-04.png",
+          "durationMs": 1185,
+          "code": "    # Two holes through the front flange.\n    for z_pos in (-7.5, 57.5):\n        part = part.cut(_cylinder(3.0, 2.3, (12.0, 0.0, z_pos), (0.0, 1.0, 0.0)))",
+          "mesh": "00049189/meshes/step-04.json"
+        },
+        {
+          "index": 4,
+          "label": "Drill the sloping-wall holes",
+          "operation": "cut",
+          "lineStart": 109,
+          "lineEnd": 123,
+          "frame": "00049189/frames/step-05.png",
+          "durationMs": 1185,
+          "code": "    # Two holes through the lower-right wall.  Their centres lie 18.5 mm\n    # back from the outer corner along the 30-degree wall.\n    small_outer_center = (\n        side_end[0] - 18.5 * tangent[0],\n        side_end[1] - 18.5 * tangent[1],\n    )\n    for z_pos in (6.0, 44.0):\n        part = part.cut(\n            _cylinder(\n                1.65,\n                2.3,\n                (small_outer_center[0], small_outer_center[1], z_pos),\n                (-SIN_30, COS_30, 0.0),\n            )\n        )",
+          "mesh": "00049189/meshes/step-05.json"
+        },
+        {
+          "index": 5,
+          "label": "Cut the large upper-wall opening",
+          "operation": "cut",
+          "lineStart": 125,
+          "lineEnd": 135,
+          "frame": "00049189/frames/step-06.png",
+          "durationMs": 1185,
+          "code": "    # Large hole through the parallel upper-left wall, centred 35 mm from\n    # the left vertex along that wall.\n    large_outer_center = (35.0 * COS_30, 34.0 + 35.0 * SIN_30)\n    part = part.cut(\n        _cylinder(\n            9.75,\n            2.3,\n            (large_outer_center[0], large_outer_center[1], 25.0),\n            (SIN_30, -COS_30, 0.0),\n        )\n    )",
+          "mesh": "00049189/meshes/step-06.json"
+        }
+      ],
+      "validation": {
+        "valid": true,
+        "solidCount": 1,
+        "volume": 30037.04541,
+        "boundingBox": {
+          "min": [
+            0,
+            -0.003021,
+            -15
+          ],
+          "max": [
+            73.260562,
+            64.75,
+            65
+          ],
+          "size": [
+            73.260563,
+            64.753021,
+            80
+          ]
+        },
+        "lastStageSymmetricDifferenceVolume": 0,
+        "lastStageMatchesFinal": true
+      },
+      "remotion": {
+        "animation": "00049189/animation.mp4",
+        "fps": 60,
+        "durationMs": 8200,
+        "finalHoldMs": 1100
+      },
+      "modelColor": "#929DA7",
+      "colorReference": "零件素材/PNG/白色背景/00049189.png"
+    }
+  ]
+}

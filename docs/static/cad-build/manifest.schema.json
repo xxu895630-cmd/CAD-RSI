@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "manifest.schema.json",
+  "title": "CAD build animation manifest",
+  "type": "object",
+  "required": [
+    "version",
+    "assetBase",
+    "loop",
+    "parts"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "assetBase": {
+      "type": "string"
+    },
+    "loop": {
+      "type": "boolean"
+    },
+    "defaultStepDurationMs": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "parts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "drawing",
+          "frames",
+          "sourceCode",
+          "steps"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[0-9]{8}$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "drawing": {
+            "type": "string"
+          },
+          "animation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "remotion": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "required": [
+              "animation",
+              "fps",
+              "durationMs",
+              "finalHoldMs"
+            ],
+            "properties": {
+              "animation": {
+                "type": "string"
+              },
+              "fps": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "durationMs": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "finalHoldMs": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          },
+          "frames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceCode": {
+            "type": "string"
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 5,
+            "maxItems": 8,
+            "items": {
+              "type": "object",
+              "required": [
+                "index",
+                "label",
+                "lineStart",
+                "lineEnd",
+                "frame",
+                "code"
+              ],
+              "properties": {
+                "index": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "label": {
+                  "type": "string"
+                },
+                "operation": {
+                  "type": "string"
+                },
+                "lineStart": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "lineEnd": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "frame": {
+                  "type": "string"
+                },
+                "durationMs": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "code": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

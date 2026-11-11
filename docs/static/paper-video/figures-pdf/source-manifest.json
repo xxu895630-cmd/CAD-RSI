@@ -1,0 +1,90 @@
+{
+  "source": "CAD-RSI.pdf (single user-provided paper)",
+  "extractedWith": "poppler pdfimages -all",
+  "figures": [
+    {
+      "file": "paper-video/figures-pdf/fig-01-overview.jpg",
+      "page": 1,
+      "pdfImageIndex": 2,
+      "originalSize": [
+        6819,
+        5688
+      ],
+      "size": [
+        2200,
+        1835
+      ],
+      "sha256": "774d274931c810789a798f5b19c025832358e30474ad67a4772d0e5bb2c7a270"
+    },
+    {
+      "file": "paper-video/figures-pdf/fig-02-paradigms.jpg",
+      "page": 2,
+      "pdfImageIndex": 3,
+      "originalSize": [
+        6122,
+        2128
+      ],
+      "size": [
+        2200,
+        765
+      ],
+      "sha256": "ed64895a9bf6e31fab5631b5535090b0ea629bcae8129589c2a7b5b301184754"
+    },
+    {
+      "file": "paper-video/figures-pdf/fig-03-architecture.jpg",
+      "page": 3,
+      "pdfImageIndex": 4,
+      "originalSize": [
+        6660,
+        4271
+      ],
+      "size": [
+        2200,
+        1411
+      ],
+      "sha256": "c9c6830ff6b13458e952c6c3ac72aad154b93de52a1ceebd9ab1f9b41d3f2e91"
+    },
+    {
+      "file": "paper-video/figures-pdf/fig-04-mechatlas.jpg",
+      "page": 4,
+      "pdfImageIndex": 5,
+      "originalSize": [
+        2833,
+        1407
+      ],
+      "size": [
+        2200,
+        1093
+      ],
+      "sha256": "667e48b4cf6fa4678ec5985840bc0db2ec1bbab51ce76fd019a65cc09eef49fd"
+    },
+    {
+      "file": "paper-video/figures-pdf/fig-05-qualitative.jpg",
+      "page": 5,
+      "pdfImageIndex": 6,
+      "originalSize": [
+        6122,
+        1895
+      ],
+      "size": [
+        2200,
+        681
+      ],
+      "sha256": "9b69ad71ec2449770221294a429f47f801a329307dffa8e5dc6ed0daf479f0bd"
+    },
+    {
+      "file": "paper-video/figures-pdf/fig-06-evolution.jpg",
+      "page": 8,
+      "pdfImageIndex": 7,
+      "originalSize": [
+        2833,
+        1340
+      ],
+      "size": [
+        2200,
+        1041
+      ],
+      "sha256": "c889bfad1cbf7fc34980313e5d44e550e6f4f466fc1ceb5d40bda69211021ef0"
+    }
+  ]
+}
